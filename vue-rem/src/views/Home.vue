@@ -10,7 +10,18 @@
       <div class="bottombac">
         <div class="frp">
           <div class="fr">
-
+            <div class="goods">
+              <div class="gming">
+                盲盒数500
+              </div>
+              <div class="">
+                <img src="../assets/tsl.png" alt="">
+              </div>
+              <div class="nameandprice">
+                <div>玛捷斯吐司炉</div>
+                <div class="price">市场价 1980</div>
+              </div>
+            </div>
           </div>
           <div class="fr2">
 
@@ -84,16 +95,50 @@ export default {
       padding-top: 148px;  
 
       .fr{
-        width: 658px;
-        height: 341px;
+        width: 703px;
+        height: 344px;
         background-image: url("../assets/frame.png");
         background-size: 100% 100%;
         margin: auto;
+
+        .gming{
+          background-image: url("../assets/num.png"); 
+          width: 133px;
+          height: 63px;
+          color: #ffffff;
+          background-size: 100% 100%;
+          font-size: 18.08px;
+          font-weight: bold;
+          -moz-box-sizing: border-box;
+          -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+          line-height: 1.5;
+          padding-top: 23.5px;
+        }
+
+        .nameandprice{
+          width: 135px;
+          height: 62px;
+          background-image: url("../assets/price.png"); 
+          background-size: 100% 100%;
+          font-size: 19.58px;
+          font-weight: bold;
+          color: #cd2f30;
+          -moz-box-sizing: border-box;
+          -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+          line-height: 1.5;
+          padding-top: 9px;
+        }
+        .price{
+          font-size: 16.57px;
+          margin-top: -5px;
+        }
       }
 
       .fr2{
-        width: 658px;
-        height: 341px;
+        width: 703px;
+        height: 344px;
         background-image: url("../assets/frame.png");
         background-size: 100% 100%;
         margin: auto;
