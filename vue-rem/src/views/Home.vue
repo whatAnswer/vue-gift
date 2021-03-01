@@ -357,6 +357,7 @@ export default {
         margin: auto;
         margin-top: 18px;
         text-align: left;
+        font-size: 0;
       }
 
       .namelist{
