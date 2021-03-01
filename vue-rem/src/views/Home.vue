@@ -14,12 +14,36 @@
               <div class="gming">
                 盲盒数500
               </div>
-              <div class="">
+              <div class="dq">
                 <img src="../assets/tsl.png" alt="">
               </div>
               <div class="nameandprice">
                 <div>玛捷斯吐司炉</div>
                 <div class="price">市场价 1980</div>
+              </div>
+            </div>
+            <div class="goods">
+              <div class="gming">
+                盲盒数20
+              </div>
+              <div class="dq1">
+                <img src="../assets/kpl.png" alt="">
+              </div>
+              <div class="nameandprice">
+                <div>玛捷斯酷烹乐</div>
+                <div class="price">市场价 11880</div>
+              </div>
+            </div>
+            <div class="goods">
+              <div class="gming">
+                盲盒数1000
+              </div>
+              <div class="dq2">
+                <img src="../assets/kkg.png" alt="">
+              </div>
+              <div class="nameandprice">
+                <div>玛捷斯酷酷锅</div>
+                <div class="price">市场价 2280</div>
               </div>
             </div>
           </div>
@@ -100,6 +124,12 @@ export default {
         background-image: url("../assets/frame.png");
         background-size: 100% 100%;
         margin: auto;
+        
+        .goods{
+          display: inline-block;
+          vertical-align: middle;
+          text-align: center;
+        }
 
         .gming{
           background-image: url("../assets/num.png"); 
@@ -114,6 +144,7 @@ export default {
           box-sizing: border-box;
           line-height: 1.5;
           padding-top: 23.5px;
+          margin: auto;
         }
 
         .nameandprice{
@@ -129,7 +160,36 @@ export default {
           box-sizing: border-box;
           line-height: 1.5;
           padding-top: 9px;
+          margin: auto;
         }
+
+        .dq{
+          width: 356px;
+
+          img{
+            width: 356px;
+            height: 234px;
+          }
+        }
+
+        .dq1{
+          width: 178px;
+
+          img{
+            width: 178px;
+            height: 209px;
+          }
+        }
+
+        .dq2{
+          width: 174px;
+
+          img{
+            width: 174px;
+            height: 116px;
+          }
+        }
+
         .price{
           font-size: 16.57px;
           margin-top: -5px;
