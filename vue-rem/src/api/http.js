@@ -1,0 +1,36 @@
+import { getRequest, putRequest, postRequest } from "./request.js"
+// import qs from 'qs'
+
+// 下面是示列代码
+export function getData(params) {
+	return getRequest('/getData', params);
+}
+
+export function postData(data) {
+	return postRequest('/postData', data);
+}
+
+export function putData(data) {
+	return putRequest('/putData', data, {
+		headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+		transformRequest: [function (data) {
+			// 对 data 进行任意转换处理
+			// // 方法一：
+			// console.log(qs.stringify(data))
+			// return qs.stringify(data)
+
+			// 方法二：
+			let ret = ""
+			for (let it in data) {
+				ret += encodeURIComponent(it) + "=" + encodeURIComponent(data[it]) + "&"
+			}
+			return ret
+
+			// return data
+		}],
+	});
+}
+
+export function draw(params) {
+	return getRequest('/choujiang', params);
+}

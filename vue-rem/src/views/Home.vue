@@ -10,45 +10,76 @@
       <div class="bottombac">
         <div class="frp">
           <div class="fr">
-            <div class="goods">
+            <div class="gmingroup">
               <div class="gming">
                 盲盒数500
               </div>
+              <div class="gming g2">
+                盲盒数20
+              </div>
+              <div class="gming g3">
+                盲盒数1000
+              </div>
+            </div>
+            <div class="goods goods1">
               <div class="dq">
                 <img src="../assets/tsl.png" alt="">
               </div>
+            </div>
+            <div class="goods goods2">
+              <div class="dq1">
+                <img src="../assets/kpl.png" alt="">
+              </div>
+            </div>
+            <div class="goods goods3">
+              <div class="dq2">
+                <img src="../assets/kkg.png" alt="">
+              </div>
+            </div>
+            <div>
               <div class="nameandprice">
                 <div>玛捷斯吐司炉</div>
                 <div class="price">市场价 1980</div>
               </div>
-            </div>
-            <div class="goods">
-              <div class="gming">
-                盲盒数20
-              </div>
-              <div class="dq1">
-                <img src="../assets/kpl.png" alt="">
-              </div>
-              <div class="nameandprice">
+              <div class="nameandprice p2">
                 <div>玛捷斯酷烹乐</div>
                 <div class="price">市场价 11880</div>
               </div>
-            </div>
-            <div class="goods">
-              <div class="gming">
-                盲盒数1000
-              </div>
-              <div class="dq2">
-                <img src="../assets/kkg.png" alt="">
-              </div>
-              <div class="nameandprice">
+              <div class="nameandprice p3">
                 <div>玛捷斯酷酷锅</div>
                 <div class="price">市场价 2280</div>
               </div>
             </div>
           </div>
           <div class="fr2">
-
+            <div class="gmingroup">
+              <div class="gming g4">
+                盲盒数1000
+              </div>
+              <div class="gming g5">
+                盲盒数480
+              </div>
+            </div>
+            <div class="goods goods1">
+              <div class="dq3">
+                <img src="../assets/zg.png" alt="">
+              </div>
+            </div>
+            <div class="goods goods2">
+              <div class="dq4">
+                <img src="../assets/gzq.png" alt="">
+              </div>
+            </div>
+            <div>
+              <div class="nameandprice p4">
+                <div>特大号蒸锅</div>
+                <div class="price">市场价 1590</div>
+              </div>
+              <div class="nameandprice p5">
+                <div>玛捷斯果汁器</div>
+                <div class="price">市场价 1180</div>
+              </div>
+            </div>
           </div>
           <div class="namelist">
             <div class="tittle">
@@ -79,11 +110,40 @@
 <script>
 // @ is an alias to /src
 import HelloWorld from "@/components/HelloWorld.vue";
+import { draw } from '../api/http.js'
 
 export default {
   name: "Home",
   components: {
     HelloWorld
+  },
+  created() {
+    // 此时获取不到dom节点
+    // 不涉及到dom操作的方法
+    this.init()
+  },
+  mounted() {
+    // 这个生命周期可以获取dom节点
+  },
+  methods: {
+    init() {
+      console.log('初始化事件')
+      this.testDraw()
+    },
+    // 你的点击方法
+    click() {
+      console.log('点击事件')
+    },
+    // 测试get请求接口调用
+    testDraw() {
+      draw().then(res=>{
+        if (res.code === 0) {
+          console.log(res)
+        }
+      }).finally(()=>{
+        console.log('成功与否都会执行')
+      })
+    }
   }
 };
 </script>
@@ -124,76 +184,169 @@ export default {
         background-image: url("../assets/frame.png");
         background-size: 100% 100%;
         margin: auto;
-        
-        .goods{
+        text-align: left;
+        font-size: 0;
+
+      }
+
+      .goods{
           display: inline-block;
           vertical-align: middle;
           text-align: center;
+          height: 190px;
         }
 
-        .gming{
-          background-image: url("../assets/num.png"); 
-          width: 133px;
-          height: 63px;
-          color: #ffffff;
-          background-size: 100% 100%;
-          font-size: 18.08px;
-          font-weight: bold;
-          -moz-box-sizing: border-box;
-          -webkit-box-sizing: border-box;
-          box-sizing: border-box;
-          line-height: 1.5;
-          padding-top: 23.5px;
-          margin: auto;
+      .goods1{
+        margin-left: 20px;
+      }
+
+      .goods2{
+        margin-left: 5px;
+      }
+
+      .goods3{
+        margin-left: 10px;
+      }
+
+      .gmingroup{
+        padding-top: 2px;
+        font-size: 0;
+      }
+
+      .gming{
+        background-image: url("../assets/num.png"); 
+        width: 133px;
+        height: 63px;
+        color: #ffffff;
+        background-size: 100% 100%;
+        font-size: 18.08px;
+        font-weight: bold;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        line-height: 1.5;
+        padding-top: 23.5px;
+        margin: auto;
+        display: inline-block;
+        vertical-align: middle;
+        text-align: center;
+        margin-left: 83px;
+      }
+
+      .g2{
+        margin-left: 79px;
+      }
+
+      .g3{
+        margin-left: 64px;
+      }
+
+      .g4{
+        margin-left: 165px;
+      }
+
+      .g5{
+        margin-left: 107px;
+      }
+
+      .nameandprice{
+        width: 135px;
+        height: 62px;
+        background-image: url("../assets/price.png"); 
+        background-size: 100% 100%;
+        font-size: 19.58px;
+        font-weight: bold;
+        color: #cd2f30;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        line-height: 1.5;
+        padding-top: 9px;
+        margin: auto;
+        display: inline-block;
+        vertical-align: middle;
+        text-align: center;
+        margin-left: 81px;
+        margin-top: 2px;
+      }
+
+      .p2{
+        margin-left: 78px;
+      }
+
+      .p3{
+        margin-left: 63px;
+      }
+
+      .p4{
+        margin-left: 166px;
+        // margin-top: -5px;
+      }
+
+      .p5{
+        margin-left: 110px;
+        margin-top: 0px;
+      }
+
+      .dq{
+        width: 242px;
+        margin-left: 20px;
+        margin-top: -2px;
+        margin-left: 2px;
+
+        img{
+          width: 242px;
+          height: 177px;
         }
+      }
 
-        .nameandprice{
-          width: 135px;
-          height: 62px;
-          background-image: url("../assets/price.png"); 
-          background-size: 100% 100%;
-          font-size: 19.58px;
-          font-weight: bold;
-          color: #cd2f30;
-          -moz-box-sizing: border-box;
-          -webkit-box-sizing: border-box;
-          box-sizing: border-box;
-          line-height: 1.5;
-          padding-top: 9px;
-          margin: auto;
+      .dq1{
+        width: 136px;
+        margin-top: -8px;
+        margin-left: 23px;
+
+        img{
+          width: 136px;
+          height: 159px;
         }
+      }
 
-        .dq{
-          width: 356px;
+      .dq2{
+        width: 174px;
+        margin-top: 28px;
+        margin-left: 35px;
 
-          img{
-            width: 356px;
-            height: 234px;
-          }
-        }
-
-        .dq1{
-          width: 178px;
-
-          img{
-            width: 178px;
-            height: 209px;
-          }
-        }
-
-        .dq2{
+        img{
           width: 174px;
-
-          img{
-            width: 174px;
-            height: 116px;
-          }
+          height: 116px;
         }
+      }
 
-        .price{
-          font-size: 16.57px;
-          margin-top: -5px;
+      .dq3{
+        width: 132px;
+        margin-top:-3px;
+        margin-left: 145px;
+
+        img{
+          width: 132px;
+          height: 158px;
         }
+      }
+
+      .dq4{
+        width: 141px;
+        margin-top: 20px;
+        margin-left: 105px;
+
+        img{
+          width: 141px;
+          height: 120px;
+        }
+      }
+
+      .price{
+        font-size: 16.57px;
+        margin-top: -5px;
       }
 
       .fr2{
@@ -203,6 +356,7 @@ export default {
         background-size: 100% 100%;
         margin: auto;
         margin-top: 18px;
+        text-align: left;
       }
 
       .namelist{
