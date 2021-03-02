@@ -252,8 +252,14 @@
           <div class="maskContent4">
             <div class="whitebac">
               <div class="prizetittle">恭喜您，中奖了！</div>
-              <div class="prizetips">恭喜您获得xxx一份，请联系客服领取，你可再抽一次或取消，若选择再次抽奖，无论是否中奖，此次奖品将作废</div>
-             <div class="confirm" @click="closeWinPrize">确定</div>
+              <div class="prizeimg"><img src="../assets/kpl.png" alt=""></div>
+              <div class="prizetips2">
+                恭喜您获得价值XXX元的xxx一份
+              </div>
+              <div class="draw-result">
+                <div class="confirm" @click="closeWinPrize">保留</div>
+                <div class="save" @click="closeWinPrize">放弃，再抽一次</div>
+              </div>
             </div>
           </div>
         </div>
@@ -261,7 +267,7 @@
     <div class="openDia" v-show="unWinPrize">
         <div class="mask"></div>
         <div class="contentBac">
-          <div class="maskContent5">
+          <div class="maskContent6">
             <div class="whitebac">
               <div class="prizetittlegray">很遗憾，您未中奖</div>
               <div class="prizetips">您未获得任何奖品，再接再励！</div>
@@ -283,19 +289,22 @@
             </div> -->
             <div class="whitebac">
               <div class="prizetittle">恭喜您，中奖了!</div>
-              <div class="prizetips">您已获得xxxx奖品一份！</div>
+              <div class="prizeimg"><img src="../assets/kpl.png" alt=""></div>
+              <div class="prizetips2">
+                恭喜您获得价值XXX元的xxx一份
+              </div>
             </div>
           </div>
         </div>
     </div>
-    <!-- <div class="openDia" v-show="loading">
+    <div class="openDia" v-show="loading">
         <div class="mask"></div>
         <div class="contentBac">
           <div class="maskContent5">
-           
+            <img src="../assets/load.gif" alt="" class="loadgif">
           </div>
         </div>
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -321,7 +330,7 @@ export default {
       winPrize: false, //中奖
       unWinPrize: false, //未中奖
       prizeResult: false, //中奖结果弹出框
-      loading: true,
+      loading: false,
       codeBtnValue: "发送验证码",
       waitTime: 60,
       isAnim: false,
@@ -339,7 +348,7 @@ export default {
   mounted() {
     // 这个生命周期可以获取dom节点
 
-    this.showReg(); //一进页面就展示登录弹出框
+    this.showReg(); //一进页面就展示登录弹出框s
     new Swiper ('.swiper-container', {
       autoplay : true,     
       speed: 3000,
@@ -362,16 +371,22 @@ export default {
     //抽奖
     getPrize() {
       console.log('抽奖');
-      this.isAnim = true;
-      this.isShowWhite = true;
-      this.isShowYellow = true;
-      clearTimeout(timer);
-      let timer = setTimeout(()=>{
-        this.winPrize = true;
-        this.isAnim = false;
-        this.isShowWhite = false;
-        this.isShowYellow = false;
-      }, 1000)
+      this.loading = true;
+      clearTimeout(timer1);
+      let timer1 = setTimeout(()=>{
+        this.loading = false;
+        this.isAnim = true;
+        this.isShowWhite = true;
+        this.isShowYellow = true;
+
+        clearTimeout(timer);
+        let timer = setTimeout(()=>{
+          this.winPrize = true;
+          this.isAnim = false;
+          this.isShowWhite = false;
+          this.isShowYellow = false;
+        }, 1000)
+      }, 3000)
     },
 
     login() {
@@ -544,13 +559,8 @@ export default {
     -webkit-animation-fill-mode: forwards;
   }
 
-  @-webkit-keyframes move1 {
-      from {  margin-top: -120px;  }
-      to {  margin-top: 0;  }
-  }
-
   @keyframes move1 {
-    from {  margin-top: -120px;  }
+    from {  margin-top: -125px;  }
     to {  margin-top: 0;  }
   }
 
@@ -644,7 +654,11 @@ export default {
     }
     
     .prizebox{
-      margin-top: -122px;
+      margin-top: -125px;
+      width: 124px;
+      height: 124px;
+      border: 4px solid #ffffff;
+      margin-left: 94px;
 
       img{
         width: 120px;
