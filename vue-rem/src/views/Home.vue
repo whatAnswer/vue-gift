@@ -225,6 +225,51 @@
           </div>
         </div>
     </div>
+    <div class="openDia" v-show="isEntitled">
+        <div class="mask"></div>
+        <div class="contentBac">
+          <div class="maskContent3">
+            <div class="whitebac">
+              <div class="nozg">您好，您尚未获得参加本次活动的权限，请咨询您的专属美食顾问。如您还没有专属顾问可拨打<a href="tel:4000210088"> 4000210088 </a>电话咨询。</div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="openDia" v-show="winPrize">
+        <div class="mask"></div>
+        <div class="contentBac">
+          <div class="maskContent4">
+            <div class="whitebac">
+              <div class="prizetittle">恭喜您，中奖了！</div>
+              <div class="prizetips">恭喜您获得xxx一份，请联系客服领取，你可再抽一次或取消，若选择再次抽奖，无论是否中奖，此次奖品将作废</div>
+             <div class="confirm">确定</div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="openDia" v-show="unWinPrize">
+        <div class="mask"></div>
+        <div class="contentBac">
+          <div class="maskContent5">
+            <div class="whitebac">
+              <div class="prizetittle">很遗憾，您未中奖</div>
+              <div class="prizetips">您未获得任何奖品，再接再励！</div>
+             <div class="confirm2">确定</div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="openDia" v-show="prizeResult">
+        <div class="mask"></div>
+        <div class="contentBac">
+          <div class="maskContent5">
+            <div class="whitebac">
+              <div class="prizetittle">很遗憾，您未中奖</div>
+              <div class="prizetips">您未获得任何奖品，再接再励！</div>
+            </div>
+          </div>
+        </div>
+    </div>
   </div>
 </template>
 
@@ -245,7 +290,11 @@ export default {
   data() {
     return {
       prizeRule: false, //奖品结果弹出框
-      islogin: false, //奖品结果弹出框
+      islogin: false, //登录弹出框
+      isEntitled: false, //是否有资格抽奖
+      winPrize: false, //中奖
+      unWinPrize: false, //未中奖
+      prizeResult: false, //中奖结果弹出框
       codeBtnValue: "发送验证码",
       waitTime: 60,
       codeTimer: '',
@@ -260,7 +309,7 @@ export default {
   mounted() {
     // 这个生命周期可以获取dom节点
 
-    this.showReg();
+    // this.showReg(); //一进页面就展示登录弹出框
     new Swiper ('.swiper-container', {
       autoplay : true,     
       speed: 3000,

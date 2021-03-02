@@ -86,6 +86,54 @@
     padding: 10px;
     height: 620px;
 }
+.maskContent3{
+    margin: auto;
+    background-color: white;
+    width: 83%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    border-radius: 15px;
+    background-color: #c01d1f;
+    padding: 10px;
+    height: 200px;
+}
+.maskContent4{
+    margin: auto;
+    background-color: white;
+    width: 83%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    border-radius: 15px;
+    background-color: #c01d1f;
+    padding: 10px;
+    height: 380px;
+}
+.maskContent5{
+    margin: auto;
+    background-color: white;
+    width: 83%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    border-radius: 15px;
+    background-color: #c01d1f;
+    padding: 10px;
+    height: 305px;
+}
 .whitebac{
     background-color: #ffffff;
     border-radius: 15px;
@@ -267,5 +315,54 @@
     line-height: 100px;
     margin: auto;
     margin-top: 100px;
+}
+.nozg{
+    font-size: 26px;
+    color: #999999;
+    width: 88%;
+    margin: auto;
+    text-align: left;
+    line-height: 1.5;
+    padding-top: 40px;
+}
+.prizetittle{
+    font-size: 40px;
+    color: #c01d1f;
+    font-weight: bold;
+    padding-top: 35px;
+    margin-bottom: 20px;
+}
+.prizetips{
+    font-size: 26px;
+    color: #999999;
+    width: 88%;
+    margin: auto;
+    text-align: left;
+    line-height: 1.5;
+    padding-top: 0px;
+}
+.confirm{
+    font-size: 40px;
+    color: #ffffff;
+    background-image: url("../assets/login.png");
+    background-size: 100% 100%;
+    width: 200px;
+    height: 100px;
+    font-weight: bold;
+    line-height: 100px;
+    margin: auto;
+    margin-top: 30px;
+}
+.confirm2{
+    font-size: 40px;
+    color: #ffffff;
+    background-image: url("../assets/login.png");
+    background-size: 100% 100%;
+    width: 200px;
+    height: 100px;
+    font-weight: bold;
+    line-height: 100px;
+    margin: auto;
+    margin-top: 30px;
 }
 
