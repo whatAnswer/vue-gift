@@ -4,7 +4,7 @@
       <div class="topbac">
         <div class="righttips">
           <div class="rule" @click="showRule">活<br>动<br>规<br>则</div>
-          <div class="result">查<br>看<br>抽<br>奖<br>结<br>果</div>
+          <div class="result" @click="showReg">查<br>看<br>抽<br>奖<br>结<br>果</div>
         </div>
         <div class="logo"><img src="../assets/logo.png" alt=""></div>
         <div class="box">
@@ -154,46 +154,72 @@
             <div class="whitebac">
               <div class="opentittle">《开盲盒 酷碰乐》Magimix Mart 3000个超值盲盒等你来开启</div>
               <div class="rulebac">
-                <div class="rulecontent">
-                  <div>因优异的功能和卓越的品质，以及日趋完善的客户服务体系，玛捷斯进入中国近两年时间，为越来越多的中国家庭喜爱、使用和分享。在2021牛年开启之时，MagimixMart首次亮相，甄选5款最受欢迎的产品、配件、甚至大家心仪已久的尚未正式上架的新品，来投入此次活动，确保每一个开启的盲盒都是超值好物。</div>
-                  <div>1、活动时间：2021年2月28日至2021年3月30日</div>
-                  <div>2、活动资格认定：</div>
-                  <div>
-                    * 活动期间购买酷烹乐标准版的客户<br>
-                    * 活动期间酷烹乐标准版订单的推荐人<br>
-                    * 有尚未使用的尊享权的客户
+                <div class="rulebacchild">
+                  <div class="rulecontent">
+                    <div>因优异的功能和卓越的品质，以及日趋完善的客户服务体系，玛捷斯进入中国近两年时间，为越来越多的中国家庭喜爱、使用和分享。在2021牛年开启之时，MagimixMart首次亮相，甄选5款最受欢迎的产品、配件、甚至大家心仪已久的尚未正式上架的新品，来投入此次活动，确保每一个开启的盲盒都是超值好物。</div>
+                    <div>1、活动时间：2021年2月28日至2021年3月30日</div>
+                    <div>2、活动资格认定：</div>
+                    <div>
+                      * 活动期间购买酷烹乐标准版的客户<br>
+                      * 活动期间酷烹乐标准版订单的推荐人<br>
+                      * 有尚未使用的尊享权的客户
+                    </div>
+                    <div>以上三类客户可参加此次活动，资格认定以手机号为准，每个手机号只能参加一次抽取盲盒的活动</div>
+                    <div>3、盲盒内容和数量：</div>
+                    <div class="money">
+                      <div>酷烹乐标准版</div>
+                      <div>20套（官方售价11880元）</div>
+                    </div>
+                    <div class="money">
+                      <div>CoCo锅</div>
+                      <div>1000套（官方售价2280元）</div>
+                    </div>
+                    <div class="money">
+                      <div>Vision透视吐司炉</div>
+                      <div>500台（官方售价1980元）</div>
+                    </div>
+                    <div class="money">
+                      <div>XL特大号蒸锅</div>
+                      <div>1000套（官方售价1590元）</div>
+                    </div>
+                    <div class="money">
+                      <div>果汁器</div>
+                      <div>480个（官方售价1180元）</div>
+                    </div>
+                    <div class="money">
+                      <div>共计</div>
+                      <div class="righttext">3000个超值盲盒(盲盒抽完，活动即自动停止)</div>
+                    </div>
+                    <div>4、盲盒价格：538元</div>
+                    <div>5、MagimixMart将于3月10日左右在官方微信公众号内开启盲盒抽奖活动，每个获得资格的手机号最多可连续抽取3次，以最后一次抽取确认的盲盒为准。</div>
+                    <div>6、所有盲盒奖品的发放按具体到货时间以及下单先后次序发放。</div>
+                    <div class="lastline">公司拥有活动解释权</div>
                   </div>
-                  <div>以上三类客户可参加此次活动，资格认定以手机号为准，每个手机号只能参加一次抽取盲盒的活动</div>
-                  <div>3、盲盒内容和数量：</div>
-                  <div>
-                    <div>酷烹乐标准版</div>
-                    <div>20套（官方售价11880元</div>
-                  </div>
-                  <div>
-                    <div>CoCo锅</div>
-                    <div>1000套（官方售价2280元）</div>
-                  </div>
-                  <div>
-                    <div>Vision透视吐司炉</div>
-                    <div>500台（官方售价1980元）</div>
-                  </div>
-                  <div>
-                    <div>XL特大号蒸锅</div>
-                    <div>1000套（官方售价1590元）</div>
-                  </div>
-                  <div>
-                    <div>果汁器</div>
-                    <div>480个（官方售价1180元）</div>
-                  </div>
-                  <div>
-                    <div>共计</div>
-                    <div>3000个超值盲盒(盲盒抽完，活动即自动停止)</div>
-                  </div>
-                  <div>4、盲盒价格：538元</div>
-                  <div>5、MagimixMart将于3月10日左右在官方微信公众号内开启盲盒抽奖活动，每个获得资格的手机号最多可连续抽取3次，以最后一次抽取确认的盲盒为准。</div>
-                  <div>6、所有盲盒奖品的发放按具体到货时间以及下单先后次序发放。</div>
-                  <div>公司拥有活动解释权</div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="openDia2" v-show="islogin">
+        <div class="mask"></div>
+        <div class="contentBac">
+          <div class="maskContent2">
+            <div class="whitebac">
+              <div class="logtittle"></div>
+              <div class="inputline">
+                <div class="inputtext">手机号</div>
+                <div class="inputp"><input type="text" placeholder="请输入手机号"></div>
+              </div>
+              <div class="inputline">
+                <div class="inputtext">验证码</div>
+                <div class="inputp codegroup">
+                  <input type="text" placeholder="请输入验证码" class="code">
+                  <input type="button" class="getcode gradientgetcodebtn" :value="codeBtnValue" @click="getCode" :disabled="canClick">
+                </div>
+              </div>
+              <div>
+                <div class="loginbtn" @click="login">登录</div>
               </div>
             </div>
           </div>
@@ -218,8 +244,12 @@ export default {
   },
   data() {
     return {
-      prizeRule: false,
-      prizeResult: false
+      prizeRule: false, //奖品结果弹出框
+      islogin: false, //奖品结果弹出框
+      codeBtnValue: "发送验证码",
+      waitTime: 60,
+      codeTimer: '',
+      canClick: false
     }
   },
   created() {
@@ -229,6 +259,8 @@ export default {
   },
   mounted() {
     // 这个生命周期可以获取dom节点
+
+    this.showReg();
     new Swiper ('.swiper-container', {
       autoplay : true,     
       speed: 3000,
@@ -236,8 +268,10 @@ export default {
       direction: 'vertical',
       autoHeight: true,
       freeMode:true
-    })  
+    })
 
+    let wait = 60;
+    let setTimeoutTimer;
   },
   methods: {
     init() {
@@ -257,12 +291,55 @@ export default {
       }, 3000);
     },
 
+    login() {
+      //ajax
+
+      //无论是否成功先关闭登录框
+      this.closeReg();
+    },
+
+    getCode() {
+      //ajax
+      console.log('11111111111');
+      this.codeTime();
+    },
+
+    codeTime() {
+      if (this.waitTime == 0) {
+          this.canClick = false;
+          this.codeBtnValue = "发送验证码";
+          wait = 60;
+          clearTimeout(this.codeTimer);
+      } else {
+          this.canClick = true;
+          this.codeBtnValue = this.waitTime + "S重新发送";
+          this.waitTime--;
+          clearTimeout(this.codeTimer);
+          this.codeTimer = setTimeout(()=>{
+              this.codeTime()
+          }, 1000)
+      }
+    },
+
     showRule() {
       this.prizeRule = true;
     },
     
     closeRule() {
       this.prizeRule = false;
+    },
+
+    showReg() {
+      console.log("111111111");
+      document.querySelector('body').style.overflow = "hidden";
+      document.querySelector('body').style.position = "fixed";
+      this.islogin = true;
+    },
+    
+    closeReg() {
+      document.querySelector('body').style.overflow = "auto";
+      document.querySelector('body').style.position = "relative";
+      this.islogin = false;
     },
 
     // 你的点击方法
