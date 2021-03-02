@@ -11,26 +11,37 @@
           <div class="lightgroup">
             <div class="leftp">
               <div v-for="index of 13" :key="index">
-                <img src="../assets/white.png" alt="" v-show="index % 2 == 0" class="white">
-                <img src="../assets/yellow.png" alt="" v-show="index % 2 != 0" class="yellow">
+                <!-- <img src="../assets/white.png" alt="" class="white" :class="{ addanim: isShowYellow }">
+                <img src="../assets/yellow.png" alt="" class="yellow" :class="{ addanim: isShowWhite }"> -->
+                <div class="yellow" v-if="index % 2 != 0" :class="{addYanimate: isShowWhite}"></div>
+                <div class="white" v-if="index % 2 == 0" :class="{addWanimate: isShowYellow}"></div>
               </div>
             </div>
             <div class="topp">
               <div v-for="index of 7" :key="index">
-                <img src="../assets/white.png" alt="" v-if="index % 2 != 0" class="white">
-                <img src="../assets/yellow.png" alt="" v-if="index % 2 == 0" class="yellow">
+                <div class="white" v-if="index % 2 != 0" :class="{addWanimate: isShowYellow}"></div>
+                <div class="yellow" v-if="index % 2 == 0" :class="{addYanimate: isShowWhite}"></div>
+                <!-- <img src="../assets/white.png" alt="" v-if="index % 2 != 0" class="white">
+                <img src="../assets/yellow.png" alt="" v-if="index % 2 == 0" class="yellow"> -->
               </div>
             </div>
             <div class="rightp">
               <div v-for="index of 13" :key="index">
-                <img src="../assets/white.png" alt="" v-if="index % 2 == 0" class="white">
-                <img src="../assets/yellow.png" alt="" v-if="index % 2 != 0" class="yellow">
+                <div class="yellow" v-if="index % 2 != 0" :class="{addYanimate: isShowWhite}"></div>
+                <div class="white" v-if="index % 2 == 0" :class="{addWanimate: isShowYellow}"></div>
+                <!-- <img src="../assets/white.png" alt="" v-if="index % 2 == 0" class="white">
+                <img src="../assets/yellow.png" alt="" v-if="index % 2 != 0" class="yellow"> -->
               </div>
             </div>
           </div>
           <img src="../assets/biglight.png" alt="" class="biglight">
           <div class="btn" @click="getPrize">
             <div>碰(3)</div>
+          </div>
+          <div class="prizeview">
+            <div class="prizebox" :class="{ addanim: isAnim }">
+              <img src="../assets/box.png" alt="">
+            </div>
           </div>
           <img src="../assets/gz.png" alt="" class="gz">
         </div>
@@ -242,7 +253,7 @@
             <div class="whitebac">
               <div class="prizetittle">恭喜您，中奖了！</div>
               <div class="prizetips">恭喜您获得xxx一份，请联系客服领取，你可再抽一次或取消，若选择再次抽奖，无论是否中奖，此次奖品将作废</div>
-             <div class="confirm">确定</div>
+             <div class="confirm" @click="closeWinPrize">确定</div>
             </div>
           </div>
         </div>
@@ -263,7 +274,7 @@
         <div class="mask"></div>
         <div class="contentBac">
           <div class="maskContent5">
-            <div class="closegroup" @click="closeRule">
+            <div class="closegroup" @click="closeResult">
               <img src="../assets/close.png" alt="">
             </div>
             <!-- <div class="whitebac">
@@ -277,6 +288,14 @@
           </div>
         </div>
     </div>
+    <!-- <div class="openDia" v-show="loading">
+        <div class="mask"></div>
+        <div class="contentBac">
+          <div class="maskContent5">
+           
+          </div>
+        </div>
+    </div> -->
   </div>
 </template>
 
@@ -301,9 +320,13 @@ export default {
       isEntitled: false, //是否有资格抽奖
       winPrize: false, //中奖
       unWinPrize: false, //未中奖
-      prizeResult: true, //中奖结果弹出框
+      prizeResult: false, //中奖结果弹出框
+      loading: true,
       codeBtnValue: "发送验证码",
       waitTime: 60,
+      isAnim: false,
+      isShowWhite: false,
+      isShowYellow: false,
       codeTimer: '',
       canClick: false
     }
@@ -316,14 +339,15 @@ export default {
   mounted() {
     // 这个生命周期可以获取dom节点
 
-    // this.showReg(); //一进页面就展示登录弹出框
+    this.showReg(); //一进页面就展示登录弹出框
     new Swiper ('.swiper-container', {
       autoplay : true,     
       speed: 3000,
       loop : true,
       direction: 'vertical',
       autoHeight: true,
-      freeMode:true
+      freeMode:true,
+      autoplayDisableOnInteraction: false
     })
 
     let wait = 60;
@@ -338,13 +362,16 @@ export default {
     //抽奖
     getPrize() {
       console.log('抽奖');
-    },
-
-    //跑马灯动画
-    houseAnimation() {
-      let timer = setInterval(()=>{
-        
-      }, 3000);
+      this.isAnim = true;
+      this.isShowWhite = true;
+      this.isShowYellow = true;
+      clearTimeout(timer);
+      let timer = setTimeout(()=>{
+        this.winPrize = true;
+        this.isAnim = false;
+        this.isShowWhite = false;
+        this.isShowYellow = false;
+      }, 1000)
     },
 
     login() {
@@ -373,19 +400,27 @@ export default {
           clearTimeout(this.codeTimer);
           this.codeTimer = setTimeout(()=>{
               this.codeTime()
-          }, 1000)
+          }, 500)
       }
     },
 
     showResult(){
+      this.prizeResult = true;
+    },
 
+    closeResult() {
+      this.prizeResult = false;
     },
 
     showRule() {
+      document.querySelector('body').style.overflow = "hidden";
+      document.querySelector('body').style.position = "fixed";
       this.prizeRule = true;
     },
     
     closeRule() {
+      document.querySelector('body').style.overflow = "auto";
+      document.querySelector('body').style.position = "relative";
       this.prizeRule = false;
     },
 
@@ -400,6 +435,10 @@ export default {
       document.querySelector('body').style.overflow = "auto";
       document.querySelector('body').style.position = "relative";
       this.islogin = false;
+    },
+
+    closeWinPrize(){
+      this.winPrize = false;
     },
 
     // 你的点击方法
@@ -420,45 +459,99 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-  .white,
-  .yellow {
-      animation-name: test;
-      animation-duration: 5s;
-      // opacity: 0;
+  .yellow{
+    width: 25px;
+    height: 27px;
+    background-image: url("../assets/yellow.png");
+    background-size: 100% 100%;
+    border-radius: 50%;
+    margin-bottom: 45px;
   }
 
-  .white {
-    animation-delay: 5s;
-    -webkit-animation-delay: 5s
-  }
-  .yellow {
-    animation-delay: 10s;
-    -webkit-animation-delay: 10s
+  .white{
+    width: 22px;
+    height: 24px;
+    background-image: url("../assets/white.png");
+    background-size: 100% 100%;
+    border-radius: 50%;
+    margin-bottom: 45px;
   }
 
-  @-webkit-keyframes test {
+  .topbac .addYanimate {
+    animation: yellowtowhite 0.4s infinite ease;
+    -webkit-animation: yellowtowhite 0.4s infinite ease;
+    animation-fill-mode:forwards;
+  }
+  .topbac .addWanimate {
+    animation: whitetoyellow 0.4s infinite ease;
+    -webkit-animation: whitetoyellow 0.4s infinite ease;
+    animation-fill-mode: forwards;
+  }
+
+  @-webkit-keyframes yellowtowhite {
       0% {
-          opacity: 0;
+        background-image: url('../assets/yellow.png');
+        // box-shadow: yellow 0 0 0 0;
       }
 
-      50% {
-          opacity: 1;
+      100% {
+        background-image: url('../assets/white.png');
+        // box-shadow: white 4px 6px 23px 6px;
+      }
+  }
+
+  @keyframes yellowtowhite {
+      0% {
+        background-image: url('../assets/yellow.png');
+        // box-shadow: yellow 0 0 0 0;
       }
 
-      100% {}
+      100% {
+        background-image: url('../assets/white.png');
+        // box-shadow: white 4px 6px 23px 6px;
+      }
+  }
+
+   @-webkit-keyframes whitetoyellow {
+      0% {
+        background-image: url('../assets/white.png');
+        //  box-shadow: white 0 0 0 0;
+      }
+
+      100% {
+        background-image: url('../assets/yellow.png');
+        // box-shadow: yellow 4px 6px 23px 6px;
+      }
 
   }
 
-  @keyframes test {
+  @keyframes whitetoyellow {
       0% {
-          opacity: 0;
+        background-image: url('../assets/white.png'); 
+        //  box-shadow: white 0 0 0 0;
       }
 
-      50% {
-          opacity: 1;
+      100% {
+        background-image: url('../assets/yellow.png');
+        // box-shadow: yellow 4px 6px 23px 6px;
       }
+  }
 
-      100% {}
+  .addanim {
+    -webkit-animation: move1 0.5s ease-in 1;
+    animation: move1 0.5s ease-in 1;
+    animation-fill-mode:forwards;
+    -webkit-animation-fill-mode: forwards;
+  }
+
+  @-webkit-keyframes move1 {
+      from {  margin-top: -120px;  }
+      to {  margin-top: 0;  }
+  }
+
+  @keyframes move1 {
+    from {  margin-top: -120px;  }
+    to {  margin-top: 0;  }
   }
 
   .swiper-container{
@@ -539,6 +632,26 @@ export default {
       position: relative;
     }
 
+    .prizeview{
+      width: 300px;
+      height: 120px;
+      position: absolute;
+      bottom: 107px;
+      left: 60px;
+      z-index: 1;
+      border-radius: 15px;
+      overflow: hidden;
+    }
+    
+    .prizebox{
+      margin-top: -122px;
+
+      img{
+        width: 120px;
+      }
+
+    }
+
     .biglight{
       width: 334px;
       height: 612px;
@@ -574,18 +687,9 @@ export default {
       position: absolute;
       bottom: 137px;
       left: 60px;
-      z-index: 1;
+      z-index: 2;
       border-radius: 15px;
       opacity: 0.5;
-    }
-
-    .yellow{
-      width: 25px;
-      height: 27px;
-    }
-
-    .white{
-      width: 20px;
     }
 
     .lightgroup{
@@ -602,9 +706,10 @@ export default {
       font-size: 0;
       z-index: 2;
 
-      div{
-        height: 71px;
-      }
+      // div{
+      //   height: 71px;
+
+      // }
     }
 
     .topp{
@@ -613,13 +718,14 @@ export default {
       top: 75px;
       position: absolute;
       width: 600px;
-      left: 28px;
+      left: 58px;
       z-index: 2;
+      text-align: center;
       
       div{
-        width: 75px;
         display: inline-block;
         vertical-align: middle;
+        margin-right: 29px;
       }
     }
 
@@ -627,13 +733,13 @@ export default {
       width: 25px;
       display: inline-block;
       right: 11px;
-      top: 50px;
+      top: 90px;
       position: absolute;
       z-index: 2;
 
-      div{
-        height: 71px;
-      }
+      // div{
+      //   height: 71px;
+      // }
     }
   }
   .bottombac{
