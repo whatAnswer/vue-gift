@@ -4,7 +4,7 @@
       <div class="topbac">
         <div class="righttips">
           <div class="rule" @click="showRule">活<br>动<br>规<br>则</div>
-          <div class="result" @click="showReg">查<br>看<br>抽<br>奖<br>结<br>果</div>
+          <div class="result" @click="showResult">查<br>看<br>抽<br>奖<br>结<br>果</div>
         </div>
         <div class="logo"><img src="../assets/logo.png" alt=""></div>
         <div class="box">
@@ -252,7 +252,7 @@
         <div class="contentBac">
           <div class="maskContent5">
             <div class="whitebac">
-              <div class="prizetittle">很遗憾，您未中奖</div>
+              <div class="prizetittlegray">很遗憾，您未中奖</div>
               <div class="prizetips">您未获得任何奖品，再接再励！</div>
              <div class="confirm2">确定</div>
             </div>
@@ -263,9 +263,16 @@
         <div class="mask"></div>
         <div class="contentBac">
           <div class="maskContent5">
+            <div class="closegroup" @click="closeRule">
+              <img src="../assets/close.png" alt="">
+            </div>
+            <!-- <div class="whitebac">
+              <div class="prizetittlegray">很遗憾，您未中奖</div>
+              <div class="prizetips">您未获得任何奖品，请再接再励！</div>
+            </div> -->
             <div class="whitebac">
-              <div class="prizetittle">很遗憾，您未中奖</div>
-              <div class="prizetips">您未获得任何奖品，再接再励！</div>
+              <div class="prizetittle">恭喜您，中奖了!</div>
+              <div class="prizetips">您已获得xxxx奖品一份！</div>
             </div>
           </div>
         </div>
@@ -294,7 +301,7 @@ export default {
       isEntitled: false, //是否有资格抽奖
       winPrize: false, //中奖
       unWinPrize: false, //未中奖
-      prizeResult: false, //中奖结果弹出框
+      prizeResult: true, //中奖结果弹出框
       codeBtnValue: "发送验证码",
       waitTime: 60,
       codeTimer: '',
@@ -368,6 +375,10 @@ export default {
               this.codeTime()
           }, 1000)
       }
+    },
+
+    showResult(){
+
     },
 
     showRule() {
