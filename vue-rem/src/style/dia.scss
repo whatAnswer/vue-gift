@@ -60,17 +60,21 @@
     border-radius: 15px;
     background-color: #c01d1f;
     padding: 10px;
+    max-height: 76%;
 }
 .whitebac{
     background-color: #ffffff;
     border-radius: 15px;
     min-height: 500px;
+    max-height: 100%;
 }
 .opentittle{
-    font-size: 36px;
+    font-size: 30px;
     color: #c01d1f;
     font-weight: bold;
     padding-top: 40px;
+    padding-left: 20px;
+    padding-right: 25px;
 }
 .rulecontent{
     font-size: 26px;
@@ -90,4 +94,7 @@
     img{
         width: 60px;
     }
+}
+.rulebac{
+
 }
