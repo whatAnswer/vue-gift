@@ -50,6 +50,10 @@
                 <div class="price">市场价 2280</div>
               </div>
             </div>
+            <div class="light">
+              <div><img src="../assets/smalllight.png" alt=""></div>
+              <div><img src="../assets/smalllight.png" alt=""></div>
+            </div>
           </div>
           <div class="fr2">
             <div class="gmingroup">
@@ -79,6 +83,10 @@
                 <div>玛捷斯果汁器</div>
                 <div class="price">市场价 1180</div>
               </div>
+            </div>
+            <div class="light">
+              <div><img src="../assets/smalllight.png" alt=""></div>
+              <div><img src="../assets/smalllight.png" alt=""></div>
             </div>
           </div>
           <div class="namelist">
@@ -186,6 +194,24 @@ export default {
         margin: auto;
         text-align: left;
         font-size: 0;
+        position: relative;
+
+        .light{
+          position: absolute;
+          top: 8px;
+          left: 63px;
+          opacity: 0.25;
+
+          div{
+            display: inline-block;
+            vertical-align: middle;
+          }
+
+          img{
+            width: 290px;
+            display: block;
+          }
+        }
 
       }
 
@@ -358,6 +384,24 @@ export default {
         margin-top: 18px;
         text-align: left;
         font-size: 0;
+        position: relative;
+
+        .light{
+          position: absolute;
+          top: 8px;
+          left: 63px;
+          opacity: 0.25;
+
+          div{
+            display: inline-block;
+            vertical-align: middle;
+          }
+
+          img{
+            width: 290px;
+            display: block;
+          }
+        }
       }
 
       .namelist{
