@@ -1,0 +1,93 @@
+.openDia{
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 99999;
+}
+.openDia .mask{
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: #333333;
+    opacity: 0.7;
+}
+.openDia .contentBac{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    z-index: 99;
+}
+.openDia .contentBac {
+    display: box;              /* OLD - Android 4.4- */
+    display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
+    display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
+    display: -ms-flexbox;      /* TWEENER - IE 10 */
+    display: -webkit-flex;     /* NEW - Chrome */
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -moz-align-items: center;
+    -ms-align-items: center;
+    -o-align-items: center;
+    align-items: center;
+    align-content: center;
+    -moz-box-pack: center;
+    box-pack: center;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -moz-justify-content: center;
+    -ms-justify-content: center;
+    -o-justify-content: center;
+    justify-content: center;
+    position: relative;
+}
+.openDia .contentBac .maskContent{
+    margin: auto;
+    background-color: white;
+    width: 83%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    border-radius: 15px;
+    background-color: #c01d1f;
+    padding: 10px;
+}
+.whitebac{
+    background-color: #ffffff;
+    border-radius: 15px;
+    min-height: 500px;
+}
+.opentittle{
+    font-size: 36px;
+    color: #c01d1f;
+    font-weight: bold;
+    padding-top: 40px;
+}
+.rulecontent{
+    font-size: 26px;
+    color: #999999;
+    width: 80%;
+    margin: auto;
+    text-align: left;
+    line-height: 1.5;
+    margin-top: 30px;
+    padding-bottom: 40px;
+}
+.closegroup{
+    position: absolute;
+    right: 0;
+    top: -90px;
+
+    img{
+        width: 60px;
+    }
+}

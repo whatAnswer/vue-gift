@@ -2,9 +2,37 @@
   <div class="home">
     <div>
       <div class="topbac">
+        <div class="righttips">
+          <div class="rule" @click="showRule">活<br>动<br>规<br>则</div>
+          <div class="result">查<br>看<br>抽<br>奖<br>结<br>果</div>
+        </div>
         <div class="logo"><img src="../assets/logo.png" alt=""></div>
         <div class="box">
-          
+          <div class="lightgroup">
+            <div class="leftp">
+              <div v-for="index of 13" :key="index">
+                <img src="../assets/white.png" alt="" v-show="index % 2 == 0" class="white">
+                <img src="../assets/yellow.png" alt="" v-show="index % 2 != 0" class="yellow">
+              </div>
+            </div>
+            <div class="topp">
+              <div v-for="index of 7" :key="index">
+                <img src="../assets/white.png" alt="" v-if="index % 2 != 0" class="white">
+                <img src="../assets/yellow.png" alt="" v-if="index % 2 == 0" class="yellow">
+              </div>
+            </div>
+            <div class="rightp">
+              <div v-for="index of 13" :key="index">
+                <img src="../assets/white.png" alt="" v-if="index % 2 == 0" class="white">
+                <img src="../assets/yellow.png" alt="" v-if="index % 2 != 0" class="yellow">
+              </div>
+            </div>
+          </div>
+          <img src="../assets/biglight.png" alt="" class="biglight">
+          <div class="btn" @click="getPrize">
+            <div>碰(3)</div>
+          </div>
+          <img src="../assets/gz.png" alt="" class="gz">
         </div>
       </div>
       <div class="bottombac">
@@ -94,23 +122,47 @@
               <div class="medal"><img src="../assets/medal.png" alt=""></div>
               <div class="medaltittle">中奖名单</div>
             </div>
-            <div>
-              <div class="prizeline">
-                <div class="name">放飞风筝</div>
-                <div class="prize">15分钟前抽中果汁机</div>
-              </div>
-              <div class="prizeline">
-                <div class="name">千小库的家-030...</div>
-                <div class="prize">22分钟前抽中XL蒸锅</div>
-              </div>
-              <div class="prizeline">
-                <div class="name">深圳贺康</div>
-                <div class="prize">30分钟前抽中果汁机</div>
+            <div class="swiper-container">
+              <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                  <div class="prizeline">
+                    <div class="name">放飞风筝</div>
+                    <div class="prize">15分钟前抽中果汁机</div>
+                  </div>
+                  <div class="prizeline">
+                    <div class="name">千小库的家-030...</div>
+                    <div class="prize">22分钟前抽中XL蒸锅</div>
+                  </div>
+                  <div class="prizeline">
+                    <div class="name">深圳贺康</div>
+                    <div class="prize">30分钟前抽中果汁机</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
+    <div class="openDia" v-show="prizeRule">
+        <div class="mask"></div>
+        <div class="contentBac">
+          <div class="maskContent">
+            <div class="closegroup" @click="closeRule">
+              <img src="../assets/close.png" alt="">
+            </div>
+            <div class="whitebac">
+              <div class="opentittle">活动规则</div>
+              <div class="rulecontent">
+                抽奖规则抽奖规则抽奖规则抽奖规则抽奖规则抽奖规则抽奖规则抽奖规则抽奖规则抽奖规则抽奖规则
+                抽奖规则抽奖规则抽奖规则抽奖规则抽奖规则抽奖规则抽奖规则抽奖规则抽奖规则抽奖规则抽奖规则
+                抽奖规则抽奖规则抽奖规则抽奖规则抽奖规则抽奖规则抽奖规则抽奖规则抽奖规则抽奖规则抽奖规则
+                抽奖规则抽奖规则抽奖规则抽奖规则抽奖规则抽奖规则抽奖规则抽奖规则抽奖规则抽奖规则抽奖规则
+                抽奖规则抽奖规则抽奖规则抽奖规则抽奖规则抽奖规则抽奖规则抽奖规则抽奖规则抽奖规则抽奖规则123
+              </div>
+            </div>
+          </div>
+        </div>
     </div>
   </div>
 </template>
@@ -118,12 +170,22 @@
 <script>
 // @ is an alias to /src
 import HelloWorld from "@/components/HelloWorld.vue";
+import Swiper from 'swiper';
 import { draw } from '../api/http.js'
+import { setInterval } from 'timers';
+import '../style/swiper.min.css'
+import '../style/dia.scss'
 
 export default {
   name: "Home",
   components: {
     HelloWorld
+  },
+  data() {
+    return {
+      prizeRule: false,
+      prizeResult: false
+    }
   },
   created() {
     // 此时获取不到dom节点
@@ -132,12 +194,42 @@ export default {
   },
   mounted() {
     // 这个生命周期可以获取dom节点
+    new Swiper ('.swiper-container', {
+      autoplay : true,     
+      speed: 3000,
+      loop : true,
+      direction: 'vertical',
+      autoHeight: true,
+      freeMode:true
+    })  
+
   },
   methods: {
     init() {
       console.log('初始化事件')
       this.testDraw()
     },
+
+    //抽奖
+    getPrize() {
+      console.log('抽奖');
+    },
+
+    //跑马灯动画
+    houseAnimation() {
+      let timer = setInterval(()=>{
+        
+      }, 3000);
+    },
+
+    showRule() {
+      this.prizeRule = true;
+    },
+    
+    closeRule() {
+      this.prizeRule = false;
+    },
+
     // 你的点击方法
     click() {
       console.log('点击事件')
@@ -156,11 +248,104 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+  .white,
+  .yellow {
+      animation-name: test;
+      animation-duration: 5s;
+      // opacity: 0;
+  }
+
+  .white {
+    animation-delay: 5s;
+    -webkit-animation-delay: 5s
+  }
+  .yellow {
+    animation-delay: 10s;
+    -webkit-animation-delay: 10s
+  }
+
+  @-webkit-keyframes test {
+      0% {
+          opacity: 0;
+      }
+
+      50% {
+          opacity: 1;
+      }
+
+      100% {}
+
+  }
+
+  @keyframes test {
+      0% {
+          opacity: 0;
+      }
+
+      50% {
+          opacity: 1;
+      }
+
+      100% {}
+  }
+
+  .swiper-container{
+    height: 128px;
+  }
+
+  .swiper-container-free-mode > .swiper-wrapper {
+    -webkit-transition-timing-function: linear;    /*之前是ease-out*/
+    -moz-transition-timing-function: linear;
+    -ms-transition-timing-function: linear;
+    -o-transition-timing-function: linear;
+    transition-timing-function: linear;
+    margin: 0 auto;
+  }
+
   .topbac{
     width: 100%;
     height: 1285px;
     background-image: url("../assets/topbac.jpg");
     background-size: 100% 100%;
+    position: relative;
+
+    .righttips{
+      position: absolute;
+      right: 0;
+      top: 320px;
+    }
+
+    .rule{
+      width: 47px;
+      height: 110px;
+      background-image: url("../assets/rule.png");
+      background-size: 100% 100%;
+      font-size: 18.08px;
+      color: #ffffff;
+      font-weight: bold;
+      line-height: 23px;
+      -moz-box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+      padding-top: 12px;
+      padding-left: 8px;
+    }
+
+    .result{
+      width: 47px;
+      height: 149px;
+      background-image: url("../assets/result.png");
+      background-size: 100% 100%;
+      font-size: 18.08px;
+      color: #ffffff;
+      font-weight: bold;
+      line-height: 23px;
+      -moz-box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+      padding-top: 10px;
+      padding-left: 8px;
+    }
 
     .logo{
       text-align: center;
@@ -173,8 +358,110 @@ export default {
     }
 
     .box{
+      margin: auto;
+      width: 646px;
       height: 1020px;
       margin-top: 274px;
+      background-image: url("../assets/megin.png");
+      background-size: 100% 100%;
+      position: relative;
+    }
+
+    .biglight{
+      width: 334px;
+      height: 612px;
+      position: absolute;
+      top: 125px;
+      left: 100px;
+      opacity: 0.25;
+    }
+
+    .btn{
+      width: 305px;
+      height: 146px;
+      background-image: url("../assets/btn6.png");
+      background-size: 100% 100%;
+      position: absolute;
+      bottom: 100px;
+      right: 18px;
+      z-index: 3;
+      font-size: 45.19px;
+      color: #ffffff;
+      font-weight: bold;
+
+      div{
+        position: absolute;
+        left: 125px;
+        top: 43px;
+      }
+    }
+
+    .gz{
+      width: 300px;
+      height: 95px;
+      position: absolute;
+      bottom: 137px;
+      left: 60px;
+      z-index: 1;
+      border-radius: 15px;
+      opacity: 0.5;
+    }
+
+    .yellow{
+      width: 25px;
+      height: 27px;
+    }
+
+    .white{
+      width: 20px;
+    }
+
+    .lightgroup{
+      position: relative;
+      height: 100%;
+    }
+
+    .leftp{
+      width: 25px;
+      display: inline-block;
+      left: 10px;
+      top: 90px;
+      position: absolute;
+      font-size: 0;
+      z-index: 2;
+
+      div{
+        height: 71px;
+      }
+    }
+
+    .topp{
+      display: inline-block;
+      font-size: 0;
+      top: 75px;
+      position: absolute;
+      width: 600px;
+      left: 28px;
+      z-index: 2;
+      
+      div{
+        width: 75px;
+        display: inline-block;
+        vertical-align: middle;
+      }
+    }
+
+    .rightp{
+      width: 25px;
+      display: inline-block;
+      right: 11px;
+      top: 50px;
+      position: absolute;
+      z-index: 2;
+
+      div{
+        height: 71px;
+      }
     }
   }
   .bottombac{
@@ -250,8 +537,7 @@ export default {
         -moz-box-sizing: border-box;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
-        line-height: 1.5;
-        padding-top: 23.5px;
+        line-height: 75px;
         margin: auto;
         display: inline-block;
         vertical-align: middle;
@@ -416,6 +702,7 @@ export default {
         box-sizing: border-box;
         padding: 0 66px;
         padding-top: 82px;
+        overflow: hidden;
 
         .tittle{
           font-size: 0;
