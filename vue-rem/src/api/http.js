@@ -34,3 +34,19 @@ export function putData(data) {
 export function draw(params) {
 	return getRequest('/choujiang', params);
 }
+// 新加的http方法
+export function getVerifyCode(params) {
+	return getRequest('http://118.89.87.12:8080/lottery/lotteryUser/sendVerificationCode/' + params, params);
+}
+
+export function logIn(params) {
+	return getRequest('http://118.89.87.12:8080/lottery/lotteryUser/login/' + params.num + '/' + params.code , params);
+}
+
+export function getAllPrize(params) {
+	return getRequest('http://118.89.87.12:8080/lottery/lotteryUser/getWinLotteryUserList', params);
+}
+
+export function getAPrize(data) {
+	return postRequest('http://118.89.87.12:8080/lottery/prizeInfo/startLottery', data);
+}

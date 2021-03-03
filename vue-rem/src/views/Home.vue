@@ -11,8 +11,6 @@
           <div class="lightgroup">
             <div class="leftp">
               <div v-for="index of 13" :key="index">
-                <!-- <img src="../assets/white.png" alt="" class="white" :class="{ addanim: isShowYellow }">
-                <img src="../assets/yellow.png" alt="" class="yellow" :class="{ addanim: isShowWhite }"> -->
                 <div class="yellow" v-if="index % 2 != 0" :class="{addYanimate: isShowWhite}"></div>
                 <div class="white" v-if="index % 2 == 0" :class="{addWanimate: isShowYellow}"></div>
               </div>
@@ -21,22 +19,18 @@
               <div v-for="index of 7" :key="index">
                 <div class="white" v-if="index % 2 != 0" :class="{addWanimate: isShowYellow}"></div>
                 <div class="yellow" v-if="index % 2 == 0" :class="{addYanimate: isShowWhite}"></div>
-                <!-- <img src="../assets/white.png" alt="" v-if="index % 2 != 0" class="white">
-                <img src="../assets/yellow.png" alt="" v-if="index % 2 == 0" class="yellow"> -->
               </div>
             </div>
             <div class="rightp">
               <div v-for="index of 13" :key="index">
                 <div class="yellow" v-if="index % 2 != 0" :class="{addYanimate: isShowWhite}"></div>
                 <div class="white" v-if="index % 2 == 0" :class="{addWanimate: isShowYellow}"></div>
-                <!-- <img src="../assets/white.png" alt="" v-if="index % 2 == 0" class="white">
-                <img src="../assets/yellow.png" alt="" v-if="index % 2 != 0" class="yellow"> -->
               </div>
             </div>
           </div>
           <img src="../assets/biglight.png" alt="" class="biglight">
           <div class="btn" @click="getPrize">
-            <div>碰(3)</div>
+            <div>{{'碰(' + clickNum + ')'}}</div>
           </div>
           <div class="prizeview">
             <div class="prizebox" :class="{ addanim: isAnim }">
@@ -128,28 +122,30 @@
               <div><img src="../assets/smalllight.png" alt=""></div>
             </div>
           </div>
-          <div class="namelist">
+         <div class="namelist">
             <div class="tittle">
               <div class="medal"><img src="../assets/medal.png" alt=""></div>
               <div class="medaltittle">中奖名单</div>
             </div>
             <div class="swiper-container">
               <div class="swiper-wrapper">
-                <div class="swiper-slide">
+                <div class="swiper-slide" v-for="item in winnerList" :key="item.id">
                   <div class="prizeline">
-                    <div class="name">放飞风筝</div>
-                    <div class="prize">15分钟前抽中果汁机</div>
-                  </div>
-                  <div class="prizeline">
-                    <div class="name">千小库的家-030...</div>
-                    <div class="prize">22分钟前抽中XL蒸锅</div>
-                  </div>
-                  <div class="prizeline">
-                    <div class="name">深圳贺康</div>
-                    <div class="prize">30分钟前抽中果汁机</div>
+                    <div class="name">{{item.name}}</div>
+                    <div class="prize">{{item.minutes + '前抽中' + item.prizeInfo.name}}</div>
                   </div>
                 </div>
               </div>
+              <!-- <div class="swiper-wrapper" v-if="winnerList.length <= 2">
+                <div class="prizeline">
+                  <div class="name">放飞风筝</div>
+                  <div class="prize">15分钟前抽中果汁机</div>
+                </div>
+                <div class="prizeline">
+                  <div class="name">放飞风筝</div>
+                  <div class="prize">15分钟前抽中果汁机</div>
+                </div>
+              </div> -->
             </div>
           </div>
         </div>
@@ -212,7 +208,7 @@
           </div>
         </div>
     </div>
-    <div class="openDia2" v-show="islogin">
+    <div class="openDia2" v-if="islogin">
         <div class="mask"></div>
         <div class="contentBac">
           <div class="maskContent2">
@@ -220,12 +216,12 @@
               <div class="logtittle"></div>
               <div class="inputline">
                 <div class="inputtext">手机号</div>
-                <div class="inputp"><input type="text" placeholder="请输入手机号"></div>
+               <div class="inputp"><input type="text" placeholder="请输入手机号" maxlength="11" @blur="refreshBody" v-model="phoneNum" @input="phoneNum=phoneNum.replace(/[^\d]/g,'')"></div>
               </div>
               <div class="inputline">
                 <div class="inputtext">验证码</div>
                 <div class="inputp codegroup">
-                  <input type="text" placeholder="请输入验证码" class="code">
+                  <input type="text" placeholder="请输入验证码" class="code" @blur="refreshBody" v-model="codeNum" @input="codeNum=codeNum.replace(/[^\d]/g,'')">
                   <input type="button" class="getcode gradientgetcodebtn" :value="codeBtnValue" @click="getCode" :disabled="canClick">
                 </div>
               </div>
@@ -236,7 +232,7 @@
           </div>
         </div>
     </div>
-    <div class="openDia" v-show="isEntitled">
+    <div class="openDia" v-if="isEntitled">
         <div class="mask"></div>
         <div class="contentBac">
           <div class="maskContent3">
@@ -246,7 +242,7 @@
           </div>
         </div>
     </div>
-    <div class="openDia" v-show="winPrize">
+    <div class="openDia" v-if="winPrize">
         <div class="mask"></div>
         <div class="contentBac">
           <div class="maskContent4">
@@ -264,7 +260,7 @@
           </div>
         </div>
     </div>
-    <div class="openDia" v-show="unWinPrize">
+    <div class="openDia" v-if="unWinPrize">
         <div class="mask"></div>
         <div class="contentBac">
           <div class="maskContent6">
@@ -276,7 +272,7 @@
           </div>
         </div>
     </div>
-    <div class="openDia" v-show="prizeResult">
+    <div class="openDia" v-if="prizeResult">
         <div class="mask"></div>
         <div class="contentBac">
           <div class="maskContent5">
@@ -297,7 +293,21 @@
           </div>
         </div>
     </div>
-    <div class="openDia" v-show="loading">
+    <div class="openDia" v-if="postAddr">
+        <div class="mask"></div>
+        <div class="contentBac">
+          <div class="maskContent7">
+            <div class="whitebac">
+              <div class="postgroup">
+                <div class="postaddr">邮寄地址：</div>
+                <div class="postinput"><textarea name="" id=""></textarea></div>
+              </div>
+              <div class="confirm2">确定</div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="openDia" v-if="loading">
         <div class="mask"></div>
         <div class="contentBac">
           <div class="maskContent5">
@@ -305,14 +315,17 @@
           </div>
         </div>
     </div>
+     <Toast :msg="toastText" v-if="showToast" />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import HelloWorld from "@/components/HelloWorld.vue";
+import Toast from "@/components/Toast.vue";
 import Swiper from 'swiper';
-import { draw } from '../api/http.js'
+import { getVerifyCode, logIn, getAllPrize, getAPrize } from '../api/http.js'
+import { instance } from '../api/request.js'
 import { setInterval } from 'timers';
 import '../style/swiper.min.css'
 import '../style/dia.scss'
@@ -320,7 +333,8 @@ import '../style/dia.scss'
 export default {
   name: "Home",
   components: {
-    HelloWorld
+    HelloWorld,
+    Toast
   },
   data() {
     return {
@@ -337,7 +351,16 @@ export default {
       isShowWhite: false,
       isShowYellow: false,
       codeTimer: '',
-      canClick: false
+      canClick: false,
+      moreThen2: true,
+      showToast: false,
+      toastText: "",
+      phoneNum: "",
+      codeNum: "",
+      toastTimer: "",
+      clickNum: 50,
+      winnerList: [],
+      postAddr: false
     }
   },
   created() {
@@ -347,8 +370,9 @@ export default {
   },
   mounted() {
     // 这个生命周期可以获取dom节点
+    this.showReg(); //一进页面就展示登录弹出框
+    this.refreshBody();
 
-    this.showReg(); //一进页面就展示登录弹出框s
     new Swiper ('.swiper-container', {
       autoplay : true,     
       speed: 3000,
@@ -358,55 +382,122 @@ export default {
       freeMode:true,
       autoplayDisableOnInteraction: false
     })
-
-    let wait = 60;
-    let setTimeoutTimer;
   },
-  methods: {
+ methods: {
     init() {
-      console.log('初始化事件')
-      this.testDraw()
+      this.getPrizeList();
+    },
+
+    refreshBody(){
+      document.querySelector('body').scrollTop = document.querySelector('body').scrollTop;
+    },
+
+    //获取中奖列表
+    getPrizeList(){
+      getAllPrize().then(res=>{
+        if (res.code === 0) {
+          console.log("中奖列表");
+          console.log(res)
+          res.datas.forEach((item)=>{
+            item.minutes = this.dealMinutes(item.minutes);
+          });
+          this.dealMinutes(61);
+          this.winnerList = res.datas;
+        }else {
+          this.openToast(res.message);
+          this.closeToast();
+        }
+      }).finally(()=>{
+        console.log('成功与否都会执行')
+      })
     },
 
     //抽奖
     getPrize() {
-      console.log('抽奖');
-      this.loading = true;
-      clearTimeout(timer1);
-      let timer1 = setTimeout(()=>{
-        this.loading = false;
-        this.isAnim = true;
-        this.isShowWhite = true;
-        this.isShowYellow = true;
+      if(this.clickNum <= 0){
+        return;
+      }
+      // ajax
+      let params = {
+        token: JSON.parse(localStorage.getItem('cj_userData')).token
+      }
 
-        clearTimeout(timer);
-        let timer = setTimeout(()=>{
-          this.winPrize = true;
-          this.isAnim = false;
-          this.isShowWhite = false;
-          this.isShowYellow = false;
-        }, 1000)
-      }, 3000)
+      getAPrize(params).then(res=>{
+        if (res.code === 0) {
+          console.log("");
+          console.log(res)
+        }else {
+          this.openToast(res.message);
+          this.closeToast();
+        }
+      }).finally(()=>{
+        this.loading = true;
+        clearTimeout(timer1);
+        let timer1 = setTimeout(()=>{
+          this.loading = false;
+          this.isAnim = true;
+          this.isShowWhite = true;
+          this.isShowYellow = true;
+
+          clearTimeout(timer);
+          let timer = setTimeout(()=>{
+            this.winPrize = true;
+            this.isAnim = false;
+            this.isShowWhite = false;
+            this.isShowYellow = false;
+          }, 1000)
+        }, 3000)
+      })
     },
 
     login() {
       //ajax
-
-      //无论是否成功先关闭登录框
-      this.closeReg();
+      let params = {
+        'num': this.phoneNum,
+        'code': this.codeNum
+      }
+      logIn(params).then(res=>{
+        if (res.code === 0) {
+          this.closeReg();
+          localStorage.setItem('cj_userData', JSON.stringify(res.data));
+          this.refreshPage(res.data)
+        }else {
+          this.openToast(res.message);
+          this.closeToast();
+        }
+      }).finally(()=>{
+        console.log('成功与否都会执行')
+      })
     },
 
     getCode() {
-      //ajax
-      console.log('11111111111');
+      //未填写手机号的验证
+      if(this.phoneNum == ""){
+        this.openToast("请输入手机号！");
+        this.closeToast();
+        return;
+      }
+
+      //调用验证码60s倒计时
       this.codeTime();
+
+      getVerifyCode(this.phoneNum).then(res=>{
+        if (res.code === 0) {
+          console.log(res);
+        }else if(res.code == -1){
+          this.closeReg();
+          this.isEntitled = true;
+        }
+      }).finally(()=>{
+        console.log('成功与否都会执行');
+      })
     },
 
     codeTime() {
       if (this.waitTime == 0) {
           this.canClick = false;
           this.codeBtnValue = "发送验证码";
-          wait = 60;
+          this.waitTime = 60;
           clearTimeout(this.codeTimer);
       } else {
           this.canClick = true;
@@ -414,9 +505,34 @@ export default {
           this.waitTime--;
           clearTimeout(this.codeTimer);
           this.codeTimer = setTimeout(()=>{
-              this.codeTime()
-          }, 500)
+            clearTimeout(this.codeTimer);
+            this.codeTime();
+          }, 1000)
       }
+    },
+
+    refreshPage(res) {
+      this.clickNum = res.loginUser.number
+    },
+
+    openToast(text) {
+      this.toastText = text;
+      this.showToast = true;
+    },
+
+    closeToast() {
+      this.toastTimer = setTimeout(()=>{
+        clearTimeout(this.toastTimer);
+        this.showToast = false;
+      }, 1500)
+    },
+
+    dealMinutes(minutes) {
+      if(minutes >= 60 && minutes < 24 * 60){
+        minutes = parseInt(minutes / 60) + "小时" + ((minutes % 60) > 0 ? (minutes % 60) + "分钟" : "")
+      }
+      console.log(minutes);
+      return minutes;
     },
 
     showResult(){
@@ -428,47 +544,37 @@ export default {
     },
 
     showRule() {
-      document.querySelector('body').style.overflow = "hidden";
-      document.querySelector('body').style.position = "fixed";
+      this.fixBody()
       this.prizeRule = true;
     },
     
     closeRule() {
-      document.querySelector('body').style.overflow = "auto";
-      document.querySelector('body').style.position = "relative";
+      this.freeBody()
       this.prizeRule = false;
     },
 
     showReg() {
-      console.log("111111111");
-      document.querySelector('body').style.overflow = "hidden";
-      document.querySelector('body').style.position = "fixed";
+      this.fixBody();
       this.islogin = true;
     },
     
     closeReg() {
-      document.querySelector('body').style.overflow = "auto";
-      document.querySelector('body').style.position = "relative";
+      this.freeBody()
       this.islogin = false;
+    },
+
+    fixBody() {
+      document.querySelector('body').style.overflow = "hidden";
+      document.querySelector('body').style.position = "fixed";
+    },
+
+    freeBody() {
+      document.querySelector('body').style.overflow = "auto";
+      document.querySelector('body').style.position = "relative"; 
     },
 
     closeWinPrize(){
       this.winPrize = false;
-    },
-
-    // 你的点击方法
-    click() {
-      console.log('点击事件')
-    },
-    // 测试get请求接口调用
-    testDraw() {
-      draw().then(res=>{
-        if (res.code === 0) {
-          console.log(res)
-        }
-      }).finally(()=>{
-        console.log('成功与否都会执行')
-      })
     }
   }
 };

@@ -84,7 +84,7 @@
     border-radius: 15px;
     background-color: #c01d1f;
     padding: 10px;
-    height: 560px;
+    height: 550px;
 }
 .maskContent3{
     margin: auto;
@@ -149,6 +149,22 @@
     background-color: #c01d1f;
     padding: 10px;
     height: 360px;
+}
+.maskContent7{
+    margin: auto;
+    background-color: white;
+    width: 83%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    border-radius: 15px;
+    background-color: #c01d1f;
+    padding: 10px;
+    height: 410px;
 }
 .whitebac{
     background-color: #ffffff;
@@ -276,6 +292,10 @@
         margin-bottom: 5px;
         padding: 0;
         padding-bottom: 3px;
+    }
+
+    input:focus{
+        outline: none;
     }
 
     .code{
@@ -440,4 +460,34 @@
     width: 100%;
     height: 100%;
 }
-
+.postaddr{
+    font-size: 30px;
+    color: #c01d1f;
+    font-weight: bold;
+    text-align: left;
+}
+.postgroup{
+    width: 80%;
+    margin: auto;
+    font-size: 0;
+    padding-top: 38px;
+}
+.postinput{
+    width: 100%;
+    height: 100px;
+    margin-top: 20px;
+}
+.postinput textarea{
+    width: 100%;
+    height: 100%;
+    border: 2px solid #c01d1f;
+    outline: none;
+    appearance: none;
+    color: #333333;
+    resize: none;;
+}
+textarea:focus{
+    outline: none;
+    appearance: none;
+    font-size: 26px;
+}

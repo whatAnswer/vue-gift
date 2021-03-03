@@ -60,3 +60,5 @@ export function postRequest(url, data, config = {}) {
 export function putRequest(url, data, config = {}) {
 	return Vue.$axios({ method: 'PUT', url, data, ...config })
 }
+
+export default instance;
