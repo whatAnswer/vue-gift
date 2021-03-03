@@ -7,13 +7,14 @@ const instance = axios.create({
 	// headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 	headers: {
 		'Content-Type': 'application/json',
-		'authorization': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ3cyIsInN1YiI6InNob3BfYXBwIiwiYXVkIjoibW9iaWxlIiwianRpIjoiYWJjZGVmZzEyMzQ1NiIsImlhdCI6MTU3NTE4ODYwNywiZXhwIjoxNTc1MTg4NjM3fQ.wT7A1MjRwYVYrvq-z5ejpm3LtoGLL2V5ooYgaXYQkRc"
+		'token': JSON.parse(localStorage.getItem('cj_userData'))&&(JSON.parse(localStorage.getItem('cj_userData')).token) || ""
 	}
 });
 
 // 添加请求拦截器
 instance.interceptors.request.use(function (config) {
 	// 在发送请求之前做些什么
+	config.headers.token = JSON.parse(localStorage.getItem('cj_userData'))&&(JSON.parse(localStorage.getItem('cj_userData')).token) || ""
 	return config;
 }, function (error) {
 	// 对请求错误做些什么

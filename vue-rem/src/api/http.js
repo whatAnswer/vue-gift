@@ -50,3 +50,7 @@ export function getAllPrize(params) {
 export function getAPrize(data) {
 	return postRequest('http://118.89.87.12:8080/lottery/prizeInfo/startLottery', data);
 }
+
+export function saveAddress(params) {
+	return postRequest(`http://118.89.87.12:8080/lotteryUser/saveAddress/${params}`)
+}

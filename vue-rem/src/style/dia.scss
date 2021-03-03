@@ -23,14 +23,12 @@
     background-color: #333333;
     opacity: 0.7;
 }
-.contentBac{
+.contentBac {
     position: absolute;
     width: 100%;
     height: 100%;
     margin: auto;
     z-index: 99;
-}
-.contentBac {
     display: box;              /* OLD - Android 4.4- */
     display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
     display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
@@ -53,6 +51,7 @@
     -o-justify-content: center;
     justify-content: center;
     position: relative;
+    background-color: rgba(51, 51, 51, 0.7);
 }
 .maskContent{
     margin: auto;
@@ -116,7 +115,6 @@
     border-radius: 15px;
     background-color: #c01d1f;
     padding: 10px;
-    height: 510px;
 }
 .maskContent5{
     margin: auto;
@@ -263,7 +261,7 @@
     color: #c01d1f;
     font-weight: bold;
     padding-top: 35px;
-    margin-bottom: 45px;
+    margin-bottom: 28px;
 }
 .inputtext{
     font-size: 30px;
@@ -292,6 +290,7 @@
         margin-bottom: 5px;
         padding: 0;
         padding-bottom: 3px;
+        height: 48px;
     }
 
     input:focus{
@@ -395,12 +394,13 @@
     text-align: center;
     line-height: 1.5;
     padding-top: 0px;
+    margin-top: 20px;
 }
 .draw-result {
     width: 100%;
     display: flex;
     justify-content: space-between;
-
+    padding-bottom: 40px;
 }
 .confirm{
     font-size: 28px;
@@ -432,6 +432,22 @@
     background: rgba(238,91,93, 0.7);
     border-radius: 10px;
     margin-left: 0;
+}
+.save2{
+    font-size: 28px;
+    text-align: center;
+    color: #ffffff;
+    // background-image: url("../assets/login.png");
+    background-size: 100% 100%;
+    width: 160px;
+    height: 80px;
+    font-weight: bold;
+    line-height: 80px;
+    margin: auto;
+    margin-top: 30px;
+    background: rgba(238,91,93, 0.7);
+    border-radius: 10px;
+    margin-left: -10px;
 }
 .confirm2{
     font-size: 28px;

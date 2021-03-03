@@ -8,7 +8,7 @@
         </div>
         <div class="logo"><img src="../assets/logo.png" alt=""></div>
         <div class="box">
-          <div class="lightgroup">
+          <!-- <div class="lightgroup">
             <div class="leftp">
               <div v-for="index of 13" :key="index">
                 <div class="yellow" v-if="index % 2 != 0" :class="{addYanimate: isShowWhite}"></div>
@@ -27,7 +27,8 @@
                 <div class="white" v-if="index % 2 == 0" :class="{addWanimate: isShowYellow}"></div>
               </div>
             </div>
-          </div>
+          </div> -->
+          <div class="mask1" :class="{addWanimate2: houseMask}" v-if="houseMask"></div>
           <img src="../assets/biglight.png" alt="" class="biglight">
           <div class="btn" @click="getPrize">
             <div>{{'碰(' + clickNum + ')'}}</div>
@@ -152,7 +153,6 @@
       </div>
     </div>
     <div class="openDia" v-show="prizeRule">
-        <div class="mask"></div>
         <div class="contentBac">
           <div class="maskContent">
             <div class="closegroup" @click="closeRule">
@@ -209,7 +209,6 @@
         </div>
     </div>
     <div class="openDia2" v-if="islogin">
-        <div class="mask"></div>
         <div class="contentBac">
           <div class="maskContent2">
             <div class="whitebac">
@@ -233,7 +232,6 @@
         </div>
     </div>
     <div class="openDia" v-if="isEntitled">
-        <div class="mask"></div>
         <div class="contentBac">
           <div class="maskContent3">
             <div class="whitebac">
@@ -243,25 +241,24 @@
         </div>
     </div>
     <div class="openDia" v-if="winPrize">
-        <div class="mask"></div>
         <div class="contentBac">
           <div class="maskContent4">
             <div class="whitebac">
               <div class="prizetittle">恭喜您，中奖了！</div>
-              <div class="prizeimg"><img src="../assets/kpl.png" alt=""></div>
+              <div class="prizeimg"><img :src="prizeInfo.src" alt=""></div>
               <div class="prizetips2">
-                恭喜您获得价值XXX元的xxx一份
+                {{'恭喜您获得价值' + prizeInfo.price + '元的' + prizeInfo.name + '一份'}}
               </div>
               <div class="draw-result">
-                <div class="confirm" @click="closeWinPrize">保留</div>
-                <div class="save" @click="closeWinPrize">放弃，再抽一次</div>
+                <div class="confirm" @click="keepPrize">保留</div>
+                <div class="save" @click="getPrize('again')">放弃，再抽一次</div>
+                <!-- <div class="save2" @click="closeWinPrize" v-if="clickNum = 0">放弃</div> -->
               </div>
             </div>
           </div>
         </div>
     </div>
-    <div class="openDia" v-if="unWinPrize">
-        <div class="mask"></div>
+    <!-- <div class="openDia" v-if="unWinPrize">
         <div class="contentBac">
           <div class="maskContent6">
             <div class="whitebac">
@@ -271,9 +268,8 @@
             </div>
           </div>
         </div>
-    </div>
+    </div> -->
     <div class="openDia" v-if="prizeResult">
-        <div class="mask"></div>
         <div class="contentBac">
           <div class="maskContent5">
             <div class="closegroup" @click="closeResult">
@@ -293,28 +289,26 @@
           </div>
         </div>
     </div>
-    <div class="openDia" v-if="postAddr">
-        <div class="mask"></div>
+    <div class="openDia2" v-if="postAddr">
         <div class="contentBac">
           <div class="maskContent7">
             <div class="whitebac">
               <div class="postgroup">
                 <div class="postaddr">邮寄地址：</div>
-                <div class="postinput"><textarea name="" id=""></textarea></div>
+                <div class="postinput"><textarea v-model="address" name="" id=""></textarea></div>
               </div>
-              <div class="confirm2">确定</div>
+              <div class="confirm2" @click="saveAddress">保存</div>
             </div>
           </div>
         </div>
     </div>
-    <div class="openDia" v-if="loading">
-        <div class="mask"></div>
+    <!-- <div class="openDia" v-if="loading">
         <div class="contentBac">
           <div class="maskContent5">
             <img src="../assets/load.gif" alt="" class="loadgif">
           </div>
         </div>
-    </div>
+    </div> -->
      <Toast :msg="toastText" v-if="showToast" />
   </div>
 </template>
@@ -324,11 +318,12 @@
 import HelloWorld from "@/components/HelloWorld.vue";
 import Toast from "@/components/Toast.vue";
 import Swiper from 'swiper';
-import { getVerifyCode, logIn, getAllPrize, getAPrize } from '../api/http.js'
+import { getVerifyCode, logIn, getAllPrize, getAPrize, saveAddress } from '../api/http.js'
 import { instance } from '../api/request.js'
 import { setInterval } from 'timers';
 import '../style/swiper.min.css'
 import '../style/dia.scss'
+import axios from 'axios'
 
 export default {
   name: "Home",
@@ -338,18 +333,19 @@ export default {
   },
   data() {
     return {
+      address: '', // 邮寄地址
       prizeRule: false, //奖品结果弹出框
       islogin: false, //登录弹出框
       isEntitled: false, //是否有资格抽奖
       winPrize: false, //中奖
-      unWinPrize: false, //未中奖
+      // unWinPrize: false, //未中奖
       prizeResult: false, //中奖结果弹出框
-      loading: false,
+      // loading: false,
       codeBtnValue: "发送验证码",
       waitTime: 60,
       isAnim: false,
-      isShowWhite: false,
-      isShowYellow: false,
+      // isShowWhite: false,
+      // isShowYellow: false,
       codeTimer: '',
       canClick: false,
       moreThen2: true,
@@ -360,7 +356,13 @@ export default {
       toastTimer: "",
       clickNum: 50,
       winnerList: [],
-      postAddr: false
+      postAddr: false,
+      prizeInfo: {
+        price: "",
+        name: "",
+        src: ""
+      },
+      houseMask: false
     }
   },
   created() {
@@ -370,7 +372,7 @@ export default {
   },
   mounted() {
     // 这个生命周期可以获取dom节点
-    this.showReg(); //一进页面就展示登录弹出框
+    // this.showReg(); //一进页面就展示登录弹出框
     this.refreshBody();
 
     new Swiper ('.swiper-container', {
@@ -394,64 +396,106 @@ export default {
 
     //获取中奖列表
     getPrizeList(){
-      getAllPrize().then(res=>{
-        if (res.code === 0) {
+      axios({
+        method: 'get',
+        url: 'http://118.89.87.12:8080/lottery/lotteryUser/getWinLotteryUserList',
+        headers: {
+          // 'token': JSON.parse(localStorage.getItem('cj_userData'))&&(JSON.parse(localStorage.getItem('cj_userData')).token) || ""
+        }
+      }).then(res=>{
+        if (res.data.code === 0) {
           console.log("中奖列表");
           console.log(res)
-          res.datas.forEach((item)=>{
+          res.data.datas.forEach((item)=>{
             item.minutes = this.dealMinutes(item.minutes);
           });
           this.dealMinutes(61);
-          this.winnerList = res.datas;
+          this.winnerList = res.data.datas;
         }else {
-          this.openToast(res.message);
+          this.openToast(res.data.message);
           this.closeToast();
         }
       }).finally(()=>{
         console.log('成功与否都会执行')
       })
+
+      // getAllPrize().then(res=>{
+      //   if (res.code === 0) {
+      //     console.log("中奖列表");
+      //     console.log(res)
+      //     res.datas.forEach((item)=>{
+      //       item.minutes = this.dealMinutes(item.minutes);
+      //     });
+      //     this.dealMinutes(61);
+      //     this.winnerList = res.datas;
+      //   }else {
+      //     this.openToast(res.message);
+      //     this.closeToast();
+      //   }
+      // }).finally(()=>{
+      //   console.log('成功与否都会执行')
+      // })
     },
 
     //抽奖
-    getPrize() {
+    getPrize(again) {
+      if(again){// 点击再抽一次过来的
+        this.closeWinPrize();
+      }
+      this.animationHouse();
       if(this.clickNum <= 0){
         return;
       }
       // ajax
-      let params = {
-        token: JSON.parse(localStorage.getItem('cj_userData')).token
-      }
+      // console.log(JSON.parse(localStorage.getItem('cj_userData')).token);
 
-      getAPrize(params).then(res=>{
+      getAPrize().then(res=>{
         if (res.code === 0) {
-          console.log("");
-          console.log(res)
+          if(res.data.prizeInfo !== null){
+            this.prizeInfo.name = res.data.prizeInfo.name;
+            this.prizeInfo.price = res.data.prizeInfo.price;
+            this.prizeInfo.src = res.data.prizeInfo.image;
+            this.animationHouse();
+            this.refreshPage = res.data.number;
+          }
         }else {
+          this.islogin = true
           this.openToast(res.message);
           this.closeToast();
         }
       }).finally(()=>{
-        this.loading = true;
-        clearTimeout(timer1);
-        let timer1 = setTimeout(()=>{
-          this.loading = false;
-          this.isAnim = true;
-          this.isShowWhite = true;
-          this.isShowYellow = true;
-
-          clearTimeout(timer);
-          let timer = setTimeout(()=>{
-            this.winPrize = true;
-            this.isAnim = false;
-            this.isShowWhite = false;
-            this.isShowYellow = false;
-          }, 1000)
-        }, 3000)
+       
       })
+    },
+
+    animationHouse() {
+      this.houseMask = true;
+      clearTimeout(timer1);
+      let timer1 = setTimeout(()=>{
+        this.isAnim = true;
+        this.houseMask = false;
+        clearTimeout(timer);
+        let timer = setTimeout(()=>{
+          this.winPrize = true;
+          this.isAnim = false;
+        }, 1000)
+      }, 1500)
     },
 
     login() {
       //ajax
+      if(this.phoneNum == ""){
+        this.openToast("请输入手机号！");
+        this.closeToast();
+        return;
+      }
+
+      if(this.codeNum == ""){
+        this.openToast("请输入验证码！");
+        this.closeToast();
+        return;
+      }
+
       let params = {
         'num': this.phoneNum,
         'code': this.codeNum
@@ -511,6 +555,26 @@ export default {
       }
     },
 
+    keepPrize() {
+      //保留奖品
+      this.closeWinPrize();
+      //打开地址输入弹出框
+      this.fixBody();
+      this.postAddr = true;
+    },
+
+    // 输入中奖后邮寄地址
+    saveAddress() {
+      console.log(12312312)
+      saveAddress(this.address).then(res=>{
+        if (res.code === 0) {
+          this.postAddr = false
+        }
+      }).finally(()=>{
+        this.postAddr = false
+      })
+    },
+
     refreshPage(res) {
       this.clickNum = res.loginUser.number
     },
@@ -554,6 +618,8 @@ export default {
     },
 
     showReg() {
+      const token = JSON.parse(localStorage.getItem('cj_userData'))&&(JSON.parse(localStorage.getItem('cj_userData')).token) || ""
+      if (token) return
       this.fixBody();
       this.islogin = true;
     },
@@ -580,83 +646,58 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-  .yellow{
-    width: 25px;
-    height: 27px;
-    background-image: url("../assets/yellow.png");
-    background-size: 100% 100%;
-    border-radius: 50%;
-    margin-bottom: 45px;
-  }
+  // .yellow{
+  //   width: 25px;
+  //   height: 27px;
+  //   background-image: url("../assets/yellow.png");
+  //   background-size: 100% 100%;
+  //   border-radius: 50%;
+  //   margin-bottom: 45px;
+  // }
 
-  .white{
-    width: 22px;
-    height: 24px;
-    background-image: url("../assets/white.png");
-    background-size: 100% 100%;
-    border-radius: 50%;
-    margin-bottom: 45px;
-  }
+  // .white{
+  //   width: 22px;
+  //   height: 24px;
+  //   background-image: url("../assets/white.png");
+  //   background-size: 100% 100%;
+  //   border-radius: 50%;
+  //   margin-bottom: 45px;
+  // }
 
-  .topbac .addYanimate {
-    animation: yellowtowhite 0.4s infinite ease;
-    -webkit-animation: yellowtowhite 0.4s infinite ease;
-    animation-fill-mode:forwards;
-  }
-  .topbac .addWanimate {
-    animation: whitetoyellow 0.4s infinite ease;
-    -webkit-animation: whitetoyellow 0.4s infinite ease;
-    animation-fill-mode: forwards;
-  }
+  // .topbac .addYanimate {
+  //   animation: yellowtowhite 0.4s infinite ease;
+  //   -webkit-animation: yellowtowhite 0.4s infinite ease;
+  //   animation-fill-mode:forwards;
+  // }
+  // .topbac .addWanimate {
+  //   animation: whitetoyellow 0.4s infinite ease;
+  //   -webkit-animation: whitetoyellow 0.4s infinite ease;
+  //   animation-fill-mode: forwards;
+  // }
 
-  @-webkit-keyframes yellowtowhite {
-      0% {
-        background-image: url('../assets/yellow.png');
-        // box-shadow: yellow 0 0 0 0;
-      }
+  // @keyframes yellowtowhite {
+  //     0% {
+  //       background-image: url('../assets/yellow.png');
+  //       // box-shadow: yellow 0 0 0 0;
+  //     }
 
-      100% {
-        background-image: url('../assets/white.png');
-        // box-shadow: white 4px 6px 23px 6px;
-      }
-  }
+  //     100% {
+  //       background-image: url('../assets/white.png');
+  //       // box-shadow: white 4px 6px 23px 6px;
+  //     }
+  // }
 
-  @keyframes yellowtowhite {
-      0% {
-        background-image: url('../assets/yellow.png');
-        // box-shadow: yellow 0 0 0 0;
-      }
+  // @keyframes whitetoyellow {
+  //     0% {
+  //       background-image: url('../assets/white.png'); 
+  //       //  box-shadow: white 0 0 0 0;
+  //     }
 
-      100% {
-        background-image: url('../assets/white.png');
-        // box-shadow: white 4px 6px 23px 6px;
-      }
-  }
-
-   @-webkit-keyframes whitetoyellow {
-      0% {
-        background-image: url('../assets/white.png');
-        //  box-shadow: white 0 0 0 0;
-      }
-
-      100% {
-        background-image: url('../assets/yellow.png');
-        // box-shadow: yellow 4px 6px 23px 6px;
-      }
-
-  }
-
-  @keyframes whitetoyellow {
-      0% {
-        background-image: url('../assets/white.png'); 
-        //  box-shadow: white 0 0 0 0;
-      }
-
-      100% {
-        background-image: url('../assets/yellow.png');
-        // box-shadow: yellow 4px 6px 23px 6px;
-      }
-  }
+  //     100% {
+  //       background-image: url('../assets/yellow.png');
+  //       // box-shadow: yellow 4px 6px 23px 6px;
+  //     }
+  // }
 
   .addanim {
     -webkit-animation: move1 0.5s ease-in 1;
@@ -673,6 +714,37 @@ export default {
   .swiper-container{
     height: 128px;
   }
+
+  .addWanimate2 {
+    animation: yellobac 0.5s infinite;
+    animation-fill-mode: forwards;
+  }
+
+  .mask1{
+    margin: auto;
+    width: 100%;
+    height: 1011px;
+    background-image: url('../assets/whitemask.png');
+    background-size: 100% 100%;
+    position: absolute;
+    bottom: -9.5px;
+    z-index: 2;
+  }
+
+  @keyframes yellobac {
+      0% {
+        background-image: url('../assets/whitemask.png');
+      }
+
+      50% {
+        background-image: url('../assets/yellowmask.png');
+      }
+
+      100% {
+        background-image: url('../assets/whitemask.png');
+      }
+  }
+
 
   .swiper-container-free-mode > .swiper-wrapper {
     -webkit-transition-timing-function: linear;    /*之前是ease-out*/
@@ -694,6 +766,7 @@ export default {
       position: absolute;
       right: 0;
       top: 320px;
+      z-index: 4;
     }
 
     .rule{
@@ -740,8 +813,8 @@ export default {
 
     .box{
       margin: auto;
-      width: 646px;
-      height: 1020px;
+      width: 100%;
+      height: 1021px;
       margin-top: 274px;
       background-image: url("../assets/megin.png");
       background-size: 100% 100%;
@@ -753,7 +826,7 @@ export default {
       height: 120px;
       position: absolute;
       bottom: 107px;
-      left: 60px;
+      left: 120px;
       z-index: 1;
       border-radius: 15px;
       overflow: hidden;
@@ -788,7 +861,7 @@ export default {
       background-size: 100% 100%;
       position: absolute;
       bottom: 100px;
-      right: 18px;
+      right: 81px;
       z-index: 3;
       font-size: 45.19px;
       color: #ffffff;
@@ -806,7 +879,7 @@ export default {
       height: 95px;
       position: absolute;
       bottom: 137px;
-      left: 60px;
+      left: 115px;
       z-index: 2;
       border-radius: 15px;
       opacity: 0.5;
@@ -1169,6 +1242,11 @@ export default {
           font-size: 22.35px;
           color: #d84b26;
           font-weight: bold;
+          width: 366px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          text-align: right;
         }
       }
     }
