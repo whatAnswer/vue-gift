@@ -248,7 +248,7 @@
                 {{'恭喜您获得价值' + prizeInfo.price + '元的' + prizeInfo.name + '一份'}}
               </div>
               <div class="draw-result">
-                <div class="confirm" @click="keepPrize">保留</div>
+                <div class="confirm" @click="keepPrize">确认</div>
                 <div class="save" @click="getPrize('again')" v-show="clickNum!=0">放弃，再抽一次</div>
                 <!-- <div class="save2" @click="closeWinPrize" v-if="clickNum = 0">放弃</div> -->
               </div>
