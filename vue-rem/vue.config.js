@@ -4,7 +4,8 @@ const pxtorem = require('postcss-pxtorem');
 module.exports = {
   lintOnSave: false,
   outputDir: 'dist',
-  publicPath: process.env.NODE_ENV === 'production' ? '/my-pro/' : '/',
+  // publicPath: process.env.NODE_ENV === 'production' ? '/my-pro/' : '/',
+  publicPath: './',
   css: {
     loaderOptions: {
       postcss: {

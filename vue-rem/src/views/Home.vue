@@ -28,7 +28,9 @@
               </div>
             </div>
           </div> -->
-          <div class="mask1" :class="{addWanimate2: houseMask}" v-if="houseMask"></div>
+          <div class="mask1" :class="{addWanimate2: houseMask}" v-show="houseMask"></div>
+          <img src="../assets/yellowmask.png" alt="" style="display: none;">
+          <img src="../assets/whitemask.png" alt="" style="display: none;">
           <img src="../assets/biglight.png" alt="" class="biglight">
           <div class="btn" @click="getPrize">
             <div>{{'碰(' + clickNum + ')'}}</div>
@@ -128,25 +130,21 @@
               <div class="medal"><img src="../assets/medal.png" alt=""></div>
               <div class="medaltittle">中奖名单</div>
             </div>
-            <div class="swiper-container">
+            <div class="swiper-container" v-if="moreThen2">
               <div class="swiper-wrapper">
-                <div class="swiper-slide" v-for="item in winnerList" :key="item.id">
-                  <div class="prizeline">
+                <div class="swiper-slide">
+                  <div class="prizeline" v-for="item in winnerList" :key="item.id">
                     <div class="name">{{item.name}}</div>
                     <div class="prize">{{item.minutes + '前抽中' + item.prizeInfo.name}}</div>
                   </div>
                 </div>
               </div>
-              <!-- <div class="swiper-wrapper" v-if="winnerList.length <= 2">
-                <div class="prizeline">
-                  <div class="name">放飞风筝</div>
-                  <div class="prize">15分钟前抽中果汁机</div>
-                </div>
-                <div class="prizeline">
-                  <div class="name">放飞风筝</div>
-                  <div class="prize">15分钟前抽中果汁机</div>
-                </div>
-              </div> -->
+            </div>
+            <div class="" v-if="!moreThen2">
+              <div class="prizeline" v-for="item in winnerList" :key="item.id">
+                <div class="name">{{item.name}}</div>
+                <div class="prize">{{item.minutes + '前抽中' + item.prizeInfo.name}}</div>
+              </div>
             </div>
           </div>
         </div>
@@ -221,7 +219,7 @@
                 <div class="inputtext">验证码</div>
                 <div class="inputp codegroup">
                   <input type="text" placeholder="请输入验证码" class="code" @blur="refreshBody" v-model="codeNum" @input="codeNum=codeNum.replace(/[^\d]/g,'')">
-                  <input type="button" class="getcode gradientgetcodebtn" :value="codeBtnValue" @click="getCode" :disabled="canClick">
+                  <input type="button" class="getcode gradientgetcodebtn" :value="codeBtnValue" @click="getCode" :disabled="canClick" @focus="refreshBody">
                 </div>
               </div>
               <div>
@@ -258,32 +256,21 @@
           </div>
         </div>
     </div>
-    <!-- <div class="openDia" v-if="unWinPrize">
-        <div class="contentBac">
-          <div class="maskContent6">
-            <div class="whitebac">
-              <div class="prizetittlegray">很遗憾，您未中奖</div>
-              <div class="prizetips">您未获得任何奖品，再接再励！</div>
-             <div class="confirm2">确定</div>
-            </div>
-          </div>
-        </div>
-    </div> -->
     <div class="openDia" v-if="prizeResult">
         <div class="contentBac">
           <div class="maskContent5">
             <div class="closegroup" @click="closeResult">
               <img src="../assets/close.png" alt="">
             </div>
-            <!-- <div class="whitebac">
-              <div class="prizetittlegray">很遗憾，您未中奖</div>
-              <div class="prizetips">您未获得任何奖品，请再接再励！</div>
-            </div> -->
-            <div class="whitebac">
+            <div class="whitebac" v-if="!isPrize">
+              <div class="prizetittlegray">您还未进行抽奖活动</div>
+              <div class="prizetips">您暂时未获得任何奖品。</div>
+            </div>
+            <div class="whitebac" v-if="isPrize">
               <div class="prizetittle">恭喜您，中奖了!</div>
-              <div class="prizeimg"><img src="../assets/kpl.png" alt=""></div>
-              <div class="prizetips2">
-                恭喜您获得价值XXX元的xxx一份
+              <div class="prizeimg"><img :src="userSeePrizeInfo.src" alt=""></div>
+              <div class="prizetips3">
+                {{'恭喜您获得价值' + userSeePrizeInfo.price + '元的' + userSeePrizeInfo.name + '一份'}}
               </div>
             </div>
           </div>
@@ -295,9 +282,9 @@
             <div class="whitebac">
               <div class="postgroup">
                 <div class="postaddr">邮寄地址：</div>
-                <div class="postinput"><textarea v-model="address" name="" id=""></textarea></div>
+                <div class="postinput"><textarea v-model="address" name="" id="" @blur="refreshBody"></textarea></div>
               </div>
-              <div class="confirm2" @click="saveAddress">保存</div>
+              <div class="confirm2" @click="saveAddr">保存</div>
             </div>
           </div>
         </div>
@@ -318,7 +305,7 @@
 import HelloWorld from "@/components/HelloWorld.vue";
 import Toast from "@/components/Toast.vue";
 import Swiper from 'swiper';
-import { getVerifyCode, logIn, getAllPrize, getAPrize, saveAddress } from '../api/http.js'
+import { getVerifyCode, logIn, getAllPrize, getAPrize, saveAddress, userPrizeResult } from '../api/http.js'
 import { instance } from '../api/request.js'
 import { setInterval } from 'timers';
 import '../style/swiper.min.css'
@@ -348,13 +335,13 @@ export default {
       // isShowYellow: false,
       codeTimer: '',
       canClick: false,
-      moreThen2: true,
+      moreThen2: false,
       showToast: false,
       toastText: "",
       phoneNum: "",
       codeNum: "",
       toastTimer: "",
-      clickNum: 50,
+      clickNum: 0,
       winnerList: [],
       postAddr: false,
       prizeInfo: {
@@ -362,7 +349,13 @@ export default {
         name: "",
         src: ""
       },
-      houseMask: false
+      houseMask: false,
+      isPrize: false,
+      userSeePrizeInfo: {
+        price: "",
+        name: "",
+        src: ""
+      }
     }
   },
   created() {
@@ -372,8 +365,8 @@ export default {
   },
   mounted() {
     // 这个生命周期可以获取dom节点
-    // this.showReg(); //一进页面就展示登录弹出框
-    this.refreshBody();
+    this.showReg(); //一进页面就展示登录弹出框
+    this.moniterNet();//监听网络
 
     new Swiper ('.swiper-container', {
       autoplay : true,     
@@ -391,7 +384,8 @@ export default {
     },
 
     refreshBody(){
-      document.querySelector('body').scrollTop = document.querySelector('body').scrollTop;
+      document.querySelector('body').scrollTop = document.querySelector('body').scrollTop + 1;
+      window.scroll(0, 0);
     },
 
     //获取中奖列表
@@ -409,8 +403,10 @@ export default {
           res.data.datas.forEach((item)=>{
             item.minutes = this.dealMinutes(item.minutes);
           });
-          this.dealMinutes(61);
           this.winnerList = res.data.datas;
+          if(this.winnerList.length > 2){
+            this.moreThen2 = true
+          }
         }else {
           this.openToast(res.data.message);
           this.closeToast();
@@ -418,23 +414,6 @@ export default {
       }).finally(()=>{
         console.log('成功与否都会执行')
       })
-
-      // getAllPrize().then(res=>{
-      //   if (res.code === 0) {
-      //     console.log("中奖列表");
-      //     console.log(res)
-      //     res.datas.forEach((item)=>{
-      //       item.minutes = this.dealMinutes(item.minutes);
-      //     });
-      //     this.dealMinutes(61);
-      //     this.winnerList = res.datas;
-      //   }else {
-      //     this.openToast(res.message);
-      //     this.closeToast();
-      //   }
-      // }).finally(()=>{
-      //   console.log('成功与否都会执行')
-      // })
     },
 
     //抽奖
@@ -442,24 +421,25 @@ export default {
       if(again){// 点击再抽一次过来的
         this.closeWinPrize();
       }
-      this.animationHouse();
-      if(this.clickNum <= 0){
-        return;
-      }
-      // ajax
-      // console.log(JSON.parse(localStorage.getItem('cj_userData')).token);
+      // if(this.clickNum <= 0){
+      //   return;
+      // }
 
       getAPrize().then(res=>{
-        if (res.code === 0) {
+        if (res.code === 0 && res.data !== null) {
           if(res.data.prizeInfo !== null){
             this.prizeInfo.name = res.data.prizeInfo.name;
             this.prizeInfo.price = res.data.prizeInfo.price;
             this.prizeInfo.src = res.data.prizeInfo.image;
+            this.clickNum = res.data.number
+            let cj_userData = JSON.parse(localStorage.getItem('cj_userData'));
+            cj_userData.loginUser.number = this.clickNum;
+            localStorage.setItem('cj_userData', JSON.stringify(cj_userData));
             this.animationHouse();
-            this.refreshPage = res.data.number;
           }
+        }else if(res.code === -1 && res.message == 'token失效'){
+          this.tokenLostShowLog()
         }else {
-          this.islogin = true
           this.openToast(res.message);
           this.closeToast();
         }
@@ -470,12 +450,12 @@ export default {
 
     animationHouse() {
       this.houseMask = true;
-      clearTimeout(timer1);
       let timer1 = setTimeout(()=>{
+        clearTimeout(timer1);
         this.isAnim = true;
         this.houseMask = false;
-        clearTimeout(timer);
         let timer = setTimeout(()=>{
+          clearTimeout(timer);
           this.winPrize = true;
           this.isAnim = false;
         }, 1000)
@@ -495,33 +475,39 @@ export default {
         this.closeToast();
         return;
       }
-
       let params = {
         'num': this.phoneNum,
         'code': this.codeNum
       }
       logIn(params).then(res=>{
+        console.log('qqqqqqqqqq');
         if (res.code === 0) {
           this.closeReg();
           localStorage.setItem('cj_userData', JSON.stringify(res.data));
-          this.refreshPage(res.data)
+          this.clickNum = res.data.loginUser.number
+          if(res.data.loginUser.prizeInfo !== null){// 用户抽奖后未点击保留或者再抽一次，或者填写地址下次登陆提醒用户再次选择
+            this.prizeInfo.name = res.data.loginUser.prizeInfo.name;
+            this.prizeInfo.price = res.data.loginUser.prizeInfo.price;
+            this.prizeInfo.src = res.data.loginUser.prizeInfo.image;
+            //展示放弃保留弹出窗
+            this.winPrize = true;
+          }
         }else {
           this.openToast(res.message);
           this.closeToast();
         }
       }).finally(()=>{
-        console.log('成功与否都会执行')
-      })
+      }).catch((error) => console.log(error))
     },
 
     getCode() {
+      this.refreshBody();
       //未填写手机号的验证
       if(this.phoneNum == ""){
         this.openToast("请输入手机号！");
         this.closeToast();
         return;
       }
-
       //调用验证码60s倒计时
       this.codeTime();
 
@@ -564,19 +550,32 @@ export default {
     },
 
     // 输入中奖后邮寄地址
-    saveAddress() {
-      console.log(12312312)
-      saveAddress(this.address).then(res=>{
+    saveAddr() {
+      if(this.address == ""){
+        this.openToast("请填写地址！");
+        this.closeToast();
+      }
+      let params = {
+        address: this.address
+      }
+
+      saveAddress(JSON.stringify(params)).then(res=>{
         if (res.code === 0) {
           this.postAddr = false
+          this.freeBody();
+          this.clickNum = 0;
+          let cj_userData = JSON.parse(localStorage.getItem('cj_userData'));
+          cj_userData.loginUser.number = 0;
+          localStorage.setItem('cj_userData', JSON.stringify(cj_userData));
+        }else if(res.code === -1 && res.message == 'token失效'){
+          this.tokenLostShowLog();
+        }else {
+          this.openToast(res.message);
+          this.closeToast();
         }
       }).finally(()=>{
         this.postAddr = false
       })
-    },
-
-    refreshPage(res) {
-      this.clickNum = res.loginUser.number
     },
 
     openToast(text) {
@@ -594,13 +593,63 @@ export default {
     dealMinutes(minutes) {
       if(minutes >= 60 && minutes < 24 * 60){
         minutes = parseInt(minutes / 60) + "小时" + ((minutes % 60) > 0 ? (minutes % 60) + "分钟" : "")
+      }else if(minutes > 24 * 60){
+        let day = parseInt(minutes / 24 * 60) + "天"
+        let hours = parseInt((minutes % 24 * 60) / 60) + "小时"
+        let second = parseInt(parseInt((minutes % 24 * 60) % 60)) + "分钟"
+        minutes = day + hours + second
+      }else {
+        minutes = minutes + "分钟"
       }
       console.log(minutes);
       return minutes;
     },
 
+    moniterNet() {
+      let el = document.querySelector('body');  
+      if (el.addEventListener) {  
+        window.addEventListener("offline", ()=> {  
+          this.openToast('网络无连接');
+          this.closeToast();
+        }, true);  
+      }  
+      else if (el.attachEvent) {  
+        window.attachEvent("onoffline", ()=> {  
+          this.openToast('网络无连接');
+          this.closeToast();
+        });  
+      }  
+      else {    
+        window.onoffline = function () {  
+          this.openToast('网络无连接');
+          this.closeToast();
+        };  
+      } 
+    },
+    //查看自己是否中奖
     showResult(){
-      this.prizeResult = true;
+      userPrizeResult().then(res=>{
+        if (res.code === 0) {
+          if(res.data.prizeInfo !== null){
+            this.userSeePrizeInfo.name = res.data.prizeInfo.name
+            this.userSeePrizeInfo.src = res.data.prizeInfo.image
+            this.userSeePrizeInfo.price = res.data.prizeInfo.price
+            this.isPrize = true
+            this.prizeResult = true;
+          }else {
+            this.isPrize = false
+            this.prizeResult = true;
+          }
+        }else if(res.code === -1 && res.message == 'token失效'){
+          this.tokenLostShowLog();
+        }else {
+          this.openToast(res.message);
+          this.closeToast();
+        }
+      }).finally(()=>{
+        console.log('成功与否都会执行');
+      })
+      
     },
 
     closeResult() {
@@ -617,9 +666,20 @@ export default {
       this.prizeRule = false;
     },
 
+    tokenLostShowLog(){
+      this.openToast("登录超时，请重新登录");
+      this.closeToast();
+      this.fixBody();
+      this.islogin = true;
+    },
+
     showReg() {
       const token = JSON.parse(localStorage.getItem('cj_userData'))&&(JSON.parse(localStorage.getItem('cj_userData')).token) || ""
-      if (token) return
+      if (token) {
+        this.clickNum = JSON.parse(localStorage.getItem('cj_userData'))&&(JSON.parse(localStorage.getItem('cj_userData')).loginUser.number) || 0
+        return
+      }
+      
       this.fixBody();
       this.islogin = true;
     },
@@ -707,7 +767,7 @@ export default {
   }
 
   @keyframes move1 {
-    from {  margin-top: -125px;  }
+    from {  margin-top: -135px;  }
     to {  margin-top: 0;  }
   }
 
@@ -727,7 +787,7 @@ export default {
     background-image: url('../assets/whitemask.png');
     background-size: 100% 100%;
     position: absolute;
-    bottom: -9.5px;
+    bottom: -8.6px;
     z-index: 2;
   }
 
@@ -735,11 +795,9 @@ export default {
       0% {
         background-image: url('../assets/whitemask.png');
       }
-
       50% {
         background-image: url('../assets/yellowmask.png');
       }
-
       100% {
         background-image: url('../assets/whitemask.png');
       }
@@ -833,7 +891,7 @@ export default {
     }
     
     .prizebox{
-      margin-top: -125px;
+      margin-top: -135px;
       width: 124px;
       height: 124px;
       border: 4px solid #ffffff;
@@ -898,11 +956,6 @@ export default {
       position: absolute;
       font-size: 0;
       z-index: 2;
-
-      // div{
-      //   height: 71px;
-
-      // }
     }
 
     .topp{
@@ -929,10 +982,6 @@ export default {
       top: 90px;
       position: absolute;
       z-index: 2;
-
-      // div{
-      //   height: 71px;
-      // }
     }
   }
   .bottombac{
