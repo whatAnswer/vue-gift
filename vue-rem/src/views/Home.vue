@@ -249,7 +249,7 @@
               </div>
               <div class="draw-result">
                 <div class="confirm" @click="keepPrize">保留</div>
-                <div class="save" @click="getPrize('again')">放弃，再抽一次</div>
+                <div class="save" @click="getPrize('again')" v-show="clickNum!=0">放弃，再抽一次</div>
                 <!-- <div class="save2" @click="closeWinPrize" v-if="clickNum = 0">放弃</div> -->
               </div>
             </div>
@@ -355,7 +355,9 @@ export default {
         price: "",
         name: "",
         src: ""
-      }
+      },
+      houseTimer: "",//跑马灯定时器
+      boxTimer: ""//抽奖纸箱子定时器
     }
   },
   created() {
@@ -421,9 +423,6 @@ export default {
       if(again){// 点击再抽一次过来的
         this.closeWinPrize();
       }
-      // if(this.clickNum <= 0){
-      //   return;
-      // }
 
       getAPrize().then(res=>{
         if (res.code === 0 && res.data !== null) {
@@ -450,12 +449,12 @@ export default {
 
     animationHouse() {
       this.houseMask = true;
-      let timer1 = setTimeout(()=>{
-        clearTimeout(timer1);
+      this.houseTimer = setTimeout(()=>{
+        clearTimeout(this.houseTimer);
         this.isAnim = true;
         this.houseMask = false;
-        let timer = setTimeout(()=>{
-          clearTimeout(timer);
+        this.boxTimer = setTimeout(()=>{
+          clearTimeout(this.boxTimer);
           this.winPrize = true;
           this.isAnim = false;
         }, 1000)
