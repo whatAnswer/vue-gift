@@ -8,33 +8,13 @@
         </div>
         <div class="logo"><img src="../assets/logo.png" alt=""></div>
         <div class="box">
-          <!-- <div class="lightgroup">
-            <div class="leftp">
-              <div v-for="index of 13" :key="index">
-                <div class="yellow" v-if="index % 2 != 0" :class="{addYanimate: isShowWhite}"></div>
-                <div class="white" v-if="index % 2 == 0" :class="{addWanimate: isShowYellow}"></div>
-              </div>
-            </div>
-            <div class="topp">
-              <div v-for="index of 7" :key="index">
-                <div class="white" v-if="index % 2 != 0" :class="{addWanimate: isShowYellow}"></div>
-                <div class="yellow" v-if="index % 2 == 0" :class="{addYanimate: isShowWhite}"></div>
-              </div>
-            </div>
-            <div class="rightp">
-              <div v-for="index of 13" :key="index">
-                <div class="yellow" v-if="index % 2 != 0" :class="{addYanimate: isShowWhite}"></div>
-                <div class="white" v-if="index % 2 == 0" :class="{addWanimate: isShowYellow}"></div>
-              </div>
-            </div>
-          </div> -->
           <div class="mask1" :class="{addWanimate2: houseMask}" v-show="houseMask"></div>
           <img src="../assets/yellowmask.png" alt="" style="display: none;">
           <img src="../assets/whitemask.png" alt="" style="display: none;">
           <img src="../assets/biglight.png" alt="" class="biglight">
-          <div class="btn" @click="getPrize">
+          <button class="btn" @click.stop="getPrize" :disabled="buttonDisable">
             <div>{{'碰(' + clickNum + ')'}}</div>
-          </div>
+          </button>
           <div class="prizeview">
             <div class="prizebox" :class="{ addanim: isAnim }">
               <img src="../assets/box.png" alt="">
@@ -130,17 +110,63 @@
               <div class="medal"><img src="../assets/medal.png" alt=""></div>
               <div class="medaltittle">中奖名单</div>
             </div>
-            <div class="swiper-container" v-if="moreThen2">
+            <div class="swiper-container" v-show="moreThen2">
               <div class="swiper-wrapper">
-                <div class="swiper-slide">
-                  <div class="prizeline" v-for="item in winnerList" :key="item.id">
+                <div class="swiper-slide" v-for="item in winnerList" :key="item.id" style="height: 42.35px;">
+                  <div class="prizeline">
                     <div class="name">{{item.name}}</div>
                     <div class="prize">{{item.minutes + '前抽中' + item.prizeInfo.name}}</div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="" v-if="!moreThen2">
+            <!-- <div class="swiper-container">
+              <div class="swiper-wrapper">
+                <div class="swiper-slide">
+                  <div class="prizeline">
+                    <div class="name">大号整过11111</div>
+                    <div class="prize">18分钟前抽中大号整过</div>
+                  </div>
+                  <div class="prizeline">
+                    <div class="name">大号整过2222</div>
+                    <div class="prize">18分钟前抽中大号整过</div>
+                  </div>
+                  <div class="prizeline">
+                    <div class="name">大号整过3333333</div>
+                    <div class="prize">18分钟前抽中大号整过</div>
+                  </div>
+                </div>
+                <div class="swiper-slide">
+                  <div class="prizeline">
+                    <div class="name">大号整过11111</div>
+                    <div class="prize">18分钟前抽中大号整过</div>
+                  </div>
+                  <div class="prizeline">
+                    <div class="name">大号整过2222</div>
+                    <div class="prize">18分钟前抽中大号整过</div>
+                  </div>
+                  <div class="prizeline">
+                    <div class="name">大号整过3333333</div>
+                    <div class="prize">18分钟前抽中大号整过</div>
+                  </div>
+                </div>
+                <div class="swiper-slide">
+                  <div class="prizeline">
+                    <div class="name">大号整过11111</div>
+                    <div class="prize">18分钟前抽中大号整过</div>
+                  </div>
+                  <div class="prizeline">
+                    <div class="name">大号整过2222</div>
+                    <div class="prize">18分钟前抽中大号整过</div>
+                  </div>
+                  <div class="prizeline">
+                    <div class="name">大号整过3333333</div>
+                    <div class="prize">18分钟前抽中大号整过</div>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+            <div class="" v-show="!moreThen2">
               <div class="prizeline" v-for="item in winnerList" :key="item.id">
                 <div class="name">{{item.name}}</div>
                 <div class="prize">{{item.minutes + '前抽中' + item.prizeInfo.name}}</div>
@@ -150,27 +176,28 @@
         </div>
       </div>
     </div>
-    <div class="openDia" v-show="prizeRule">
+    <!-- 是否同意弹出框 -->
+    <div class="openDia" v-show="getPrizeRule">
         <div class="contentBac">
           <div class="maskContent">
-            <div class="closegroup" @click="closeRule">
+            <div class="closegroup" @click="closeAgreeBox">
               <img src="../assets/close.png" alt="">
             </div>
             <div class="whitebac">
-              <div class="opentittle">《开盲盒 酷碰乐》Magimix Mart 3000个超值盲盒等你来开启</div>
               <div class="rulebac">
+                <div class="opentittle">开盲盒酷碰乐 3 月活动细则</div>
                 <div class="rulebacchild">
-                  <div class="rulecontent">
-                    <div>因优异的功能和卓越的品质，以及日趋完善的客户服务体系，玛捷斯进入中国近两年时间，为越来越多的中国家庭喜爱、使用和分享。在2021牛年开启之时，MagimixMart首次亮相，甄选5款最受欢迎的产品、配件、甚至大家心仪已久的尚未正式上架的新品，来投入此次活动，确保每一个开启的盲盒都是超值好物。</div>
-                    <div>1、活动时间：2021年2月28日至2021年3月30日</div>
-                    <div>2、活动资格认定：</div>
-                    <div>
-                      * 活动期间购买酷烹乐标准版的客户<br>
-                      * 活动期间酷烹乐标准版订单的推荐人<br>
-                      * 有尚未使用的尊享权的客户
-                    </div>
+                  <div class="rulecontent rulecontent2">
+                    <div class="blacktittle">一、活动时间节点：</div>
+                    <div>获得活动资格时间 2021年2月28日 至 2021年3月30日24时</div>
+                    <div>抽盲盒开放时间 2021年3月10日 至 2021年4月10日18时</div>
+                    <div>优惠券有效期：获得优惠券之时至 2021年4月30日24时</div>
+                    <div class="blacktittle">二、活动参与资格认定：</div>
+                    <div>* 活动期间购买酷烹乐标准版的客户</div>
+                    <div>* 活动期间酷烹乐标准版订单的推荐人</div>
+                    <div>* 有尚未使用的尊享权的客户</div>
                     <div>以上三类客户可参加此次活动，资格认定以手机号为准，每个手机号只能参加一次抽取盲盒的活动</div>
-                    <div>3、盲盒内容和数量：</div>
+                    <div class="blacktittle">三、盲盒内容和数量：</div>
                     <div class="money">
                       <div>酷烹乐标准版</div>
                       <div>20套（官方售价11880元）</div>
@@ -192,12 +219,162 @@
                       <div>480个（官方售价1180元）</div>
                     </div>
                     <div class="money">
-                      <div>共计</div>
-                      <div class="righttext">3000个超值盲盒(盲盒抽完，活动即自动停止)</div>
+                      <div>共计 3000 个超值盲盒(盲盒抽完，活动即自动停止)</div>
                     </div>
-                    <div>4、盲盒价格：538元</div>
-                    <div>5、MagimixMart将于3月10日左右在官方微信公众号内开启盲盒抽奖活动，每个获得资格的手机号最多可连续抽取3次，以最后一次抽取确认的盲盒为准。</div>
-                    <div>6、所有盲盒奖品的发放按具体到货时间以及下单先后次序发放。</div>
+                    <div class="blacktittle">四、盲盒价格：538元</div>
+                    <div class="blacktittle">五、具体细节</div>
+                    <div class="graytittle">1) 活动期间购买酷烹乐（标准版）用户和相应转介绍客户（需正确填写介绍人）的手机号码在确认发货的一个工作日后自动获得抽奖资格</div>
+                    <div class="graytittle">2) 抽奖平台：H5小游戏 3月10日上线。用下单程序填写的手机号登录，系统判断是否有资格</div>
+                    <div>1. 有资格：进入直接抽奖</div>
+                    <div>2. 无资格：咨询顾问或 400</div>
+                    <div class="graytittle">3) 抽奖</div>
+                    <div>1. 抽取次数最多 3 次，以最终确认结果为准，第三次抽取结果会自动确认结果</div>
+                    <div>2. 前两次抽取会出现确认或放弃结果两个选择，第三次抽取结果会自动确认，确认后将收到以下短信内容：
+                        亲爱的用户，恭喜您以 538 元的价格获得本次活动的 XXX 超值换购优
+                        惠券一张，我司将于 3 个工作日内将对应的优惠券发放至您的账户内，
+                        请于 30 日内登录 magimix 下单小程序，在我的优惠券中查看并使用优
+                        惠券。如有疑问，请及时和您的美食顾问取得联系。
+                    </div>
+                    <div>举例 1：</div>
+                    <div>用户小玛第一次抽中盲盒为果汁器，系统会扣除一次抽取机会并弹出对话
+                        框抽中果汁器，同时要求选择“确认”或者“放弃”，小马选择确认则系
+                        统将在三个工作日内把用 538 购买果汁器的优惠券自动发放到下单程序
+                        后台。
+                    </div>
+                    <div>举例 2：</div>
+                    <div>用户小捷第一次抽中盲盒为果汁器，系统会扣除一次抽取机会并弹出对话
+                        框抽中果汁器，同时要求选择“确认”或者“放弃”，小捷不满意结果选
+                        择“放弃”，则进入第二次抽取，第二次抽中酷烹乐标准版，小捷很喜欢
+                        选择确认则系统将在三个工作日内把用 538 购买酷烹乐标准版的优惠券
+                        自动发放到下单程序后台。
+                    </div>
+                    <div>举例 3：</div>
+                    <div>用户小斯第一次抽中盲盒为大蒸锅，系统会扣除一次抽取机会并弹出对话
+                        框抽中大蒸锅，同时要求选择“确认”或者“放弃”，小斯不满意结果选
+                        择“放弃”，则进入第二次抽取，第二次抽中果汁器，小斯不满意结果选
+                        择“放弃”，则进入第三次抽取，第三次抽中大蒸锅，由于次数用完抽奖
+                        结果自动确认系统将在三个工作日内把用 538 购买大蒸锅的优惠券自动
+                        发放到下单程序后台。
+                    </div>
+                    <div class="graytittle">4) 盲盒产品购买</div>
+                    <div>1. 优惠券：确认抽奖结果后，在三个工作日内自动发放到下单程序后台</div>
+                    <div>2. 购买：购买相应产品时使用优惠券抵扣，相应产品价格将变成 538 元，付款完成购买</div>
+                    <div>3. 不购买：如果客户改变主意，可以不进行购买。优惠券将于 2021年4月30日24时自动消失</div>
+                    <div class="graytittle">5) 发货</div>
+                    <div>1. 盲盒奖品将于 2021 年 4 月底按照奖品下单先后次序发放</div>
+                    <div class="graytittle">6) 退货</div>
+                    <div>1. 活动期间正价购买的酷烹乐（标准版）退货问题与其所关联的盲盒权限绑定</div>
+                    <div>2. 如果正价购买的酷烹乐（标准版）发起退货，其相关联的盲盒奖品和所绑定的转介绍关联的盲盒奖品，都需一并退回；奖品如已经打开则需补差价</div>
+                    <div class="graytittle">7) 特权卡</div>
+                    <div>特权卡为优先判定，即特权卡用户所对应手机号码可以直接进入 H5 活动页面参与抽盲盒，一旦进入抽盲盒阶段，特权卡将被视作使用</div>
+                    <div class="graytittle">8) 关于手机号</div>
+                    <div>1. 一个手机号最多只能参加一次抽盲盒活动</div>
+                    <div>2. 已经参加过抽盲盒活动，后发起酷烹乐标准版退款退款，之后用相同手机号再次购买，也将没有抽盲盒的资格</div>
+                    <div class="lastline">公司拥有活动解释权</div>
+                  </div>
+                </div>
+              </div>
+              <div class="agreegroup">
+                <div class="agreerule" @click="agreeRule">已阅读，同意活动规则</div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <!-- 查看活动规则弹出框 -->
+    <div class="openDia" v-show="prizeRule">
+        <div class="contentBac">
+          <div class="maskContent">
+            <div class="closegroup" @click="closeRule">
+              <img src="../assets/close.png" alt="">
+            </div>
+            <div class="whitebac">
+              <div class="rulebac">
+                <div class="opentittle">开盲盒酷碰乐 3 月活动细则</div>
+                <div class="rulebacchild">
+                  <div class="rulecontent">
+                    <div class="blacktittle">一、活动时间节点：</div>
+                    <div>获得活动资格时间 2021年2月28日 至 2021年3月30日24时</div>
+                    <div>抽盲盒开放时间 2021年3月10日 至 2021年4月10日18时</div>
+                    <div>优惠券有效期：获得优惠券之时至 2021年4月30日24时</div>
+                    <div class="blacktittle">二、活动参与资格认定：</div>
+                    <div>* 活动期间购买酷烹乐标准版的客户</div>
+                    <div>* 活动期间酷烹乐标准版订单的推荐人</div>
+                    <div>* 有尚未使用的尊享权的客户</div>
+                    <div>以上三类客户可参加此次活动，资格认定以手机号为准，每个手机号只能参加一次抽取盲盒的活动</div>
+                    <div class="blacktittle">三、盲盒内容和数量：</div>
+                    <div class="money">
+                      <div>酷烹乐标准版</div>
+                      <div>20套（官方售价11880元）</div>
+                    </div>
+                    <div class="money">
+                      <div>CoCo锅</div>
+                      <div>1000套（官方售价2280元）</div>
+                    </div>
+                    <div class="money">
+                      <div>Vision透视吐司炉</div>
+                      <div>500台（官方售价1980元）</div>
+                    </div>
+                    <div class="money">
+                      <div>XL特大号蒸锅</div>
+                      <div>1000套（官方售价1590元）</div>
+                    </div>
+                    <div class="money">
+                      <div>果汁器</div>
+                      <div>480个（官方售价1180元）</div>
+                    </div>
+                    <div class="money">
+                      <div>共计 3000 个超值盲盒(盲盒抽完，活动即自动停止)</div>
+                    </div>
+                    <div class="blacktittle">四、盲盒价格：538元</div>
+                    <div class="blacktittle">五、具体细节</div>
+                    <div class="graytittle">1) 活动期间购买酷烹乐（标准版）用户和相应转介绍客户（需正确填写介绍人）的手机号码在确认发货的一个工作日后自动获得抽奖资格</div>
+                    <div class="graytittle">2) 抽奖平台：H5小游戏 3月10日上线。用下单程序填写的手机号登录，系统判断是否有资格</div>
+                    <div>1. 有资格：进入直接抽奖</div>
+                    <div>2. 无资格：咨询顾问或 400</div>
+                    <div class="graytittle">3) 抽奖</div>
+                    <div>1. 抽取次数最多 3 次，以最终确认结果为准，第三次抽取结果会自动确认结果</div>
+                    <div>2. 前两次抽取会出现确认或放弃结果两个选择，第三次抽取结果会自动确认，确认后将收到以下短信内容：
+                        亲爱的用户，恭喜您以 538 元的价格获得本次活动的 XXX 超值换购优
+                        惠券一张，我司将于 3 个工作日内将对应的优惠券发放至您的账户内，
+                        请于 30 日内登录 magimix 下单小程序，在我的优惠券中查看并使用优
+                        惠券。如有疑问，请及时和您的美食顾问取得联系。
+                    </div>
+                    <div>举例 1：</div>
+                    <div>用户小玛第一次抽中盲盒为果汁器，系统会扣除一次抽取机会并弹出对话
+                        框抽中果汁器，同时要求选择“确认”或者“放弃”，小马选择确认则系
+                        统将在三个工作日内把用 538 购买果汁器的优惠券自动发放到下单程序
+                        后台。
+                    </div>
+                    <div>举例 2：</div>
+                    <div>用户小捷第一次抽中盲盒为果汁器，系统会扣除一次抽取机会并弹出对话
+                        框抽中果汁器，同时要求选择“确认”或者“放弃”，小捷不满意结果选
+                        择“放弃”，则进入第二次抽取，第二次抽中酷烹乐标准版，小捷很喜欢
+                        选择确认则系统将在三个工作日内把用 538 购买酷烹乐标准版的优惠券
+                        自动发放到下单程序后台。
+                    </div>
+                    <div>举例 3：</div>
+                    <div>用户小斯第一次抽中盲盒为大蒸锅，系统会扣除一次抽取机会并弹出对话
+                        框抽中大蒸锅，同时要求选择“确认”或者“放弃”，小斯不满意结果选
+                        择“放弃”，则进入第二次抽取，第二次抽中果汁器，小斯不满意结果选
+                        择“放弃”，则进入第三次抽取，第三次抽中大蒸锅，由于次数用完抽奖
+                        结果自动确认系统将在三个工作日内把用 538 购买大蒸锅的优惠券自动
+                        发放到下单程序后台。
+                    </div>
+                    <div class="graytittle">4) 盲盒产品购买</div>
+                    <div>1. 优惠券：确认抽奖结果后，在三个工作日内自动发放到下单程序后台</div>
+                    <div>2. 购买：购买相应产品时使用优惠券抵扣，相应产品价格将变成 538 元，付款完成购买</div>
+                    <div>3. 不购买：如果客户改变主意，可以不进行购买。优惠券将于 2021年4月30日24时自动消失</div>
+                    <div class="graytittle">5) 发货</div>
+                    <div>1. 盲盒奖品将于 2021 年 4 月底按照奖品下单先后次序发放</div>
+                    <div class="graytittle">6) 退货</div>
+                    <div>1. 活动期间正价购买的酷烹乐（标准版）退货问题与其所关联的盲盒权限绑定</div>
+                    <div>2. 如果正价购买的酷烹乐（标准版）发起退货，其相关联的盲盒奖品和所绑定的转介绍关联的盲盒奖品，都需一并退回；奖品如已经打开则需补差价</div>
+                    <div class="graytittle">7) 特权卡</div>
+                    <div>特权卡为优先判定，即特权卡用户所对应手机号码可以直接进入 H5 活动页面参与抽盲盒，一旦进入抽盲盒阶段，特权卡将被视作使用</div>
+                    <div class="graytittle">8) 关于手机号</div>
+                    <div>1. 一个手机号最多只能参加一次抽盲盒活动</div>
+                    <div>2. 已经参加过抽盲盒活动，后发起酷烹乐标准版退款退款，之后用相同手机号再次购买，也将没有抽盲盒的资格</div>
                     <div class="lastline">公司拥有活动解释权</div>
                   </div>
                 </div>
@@ -206,6 +383,7 @@
           </div>
         </div>
     </div>
+    <!-- 登录弹出框 -->
     <div class="openDia2" v-if="islogin">
         <div class="contentBac">
           <div class="maskContent2">
@@ -229,6 +407,7 @@
           </div>
         </div>
     </div>
+    <!-- 无参加活动权限 -->
     <div class="openDia" v-if="isEntitled">
         <div class="contentBac">
           <div class="maskContent3">
@@ -238,6 +417,7 @@
           </div>
         </div>
     </div>
+    <!-- 确认和放弃弹出框 -->
     <div class="openDia" v-if="winPrize">
         <div class="contentBac">
           <div class="maskContent4">
@@ -250,12 +430,12 @@
               <div class="draw-result">
                 <div class="confirm" @click="keepPrize">确认</div>
                 <div class="save" @click="getPrize('again')" v-show="clickNum!=0">放弃，再抽一次</div>
-                <!-- <div class="save2" @click="closeWinPrize" v-if="clickNum = 0">放弃</div> -->
               </div>
             </div>
           </div>
         </div>
     </div>
+    <!-- 查看中奖结果弹出框 -->
     <div class="openDia" v-if="prizeResult">
         <div class="contentBac">
           <div class="maskContent5">
@@ -276,38 +456,32 @@
           </div>
         </div>
     </div>
-    <div class="openDia2" v-if="postAddr">
+    <!-- 点击保留后跟短信一样内容的弹出框 -->
+    <div class="openDia" v-if="confirmMessage">
         <div class="contentBac">
-          <div class="maskContent7">
+          <div class="maskContent5">
+            <div class="closegroup" @click="confirmMessage = false">
+              <img src="../assets/close.png" alt="">
+            </div>
             <div class="whitebac">
-              <div class="postgroup">
-                <div class="postaddr">邮寄地址：</div>
-                <div class="postinput"><textarea v-model="address" name="" id="" @blur="refreshBody"></textarea></div>
+              <div class="prizetips4">
+                {{'【Magimix】亲爱的用户，恭喜您以'+ prizeInfo.price + '元的价格获得本次活动的' + prizeInfo.name + '超值换购优惠券一张，我司将于3个工作日内将对应的优惠券发放至您的账户内，请于30日内登录magimix下单小程序，在我的优惠券中查看并使用优惠券。如有疑问，请及时和您的美食顾问取得联系。'}}
               </div>
-              <div class="confirm2" @click="saveAddr">保存</div>
             </div>
           </div>
         </div>
     </div>
-    <!-- <div class="openDia" v-if="loading">
-        <div class="contentBac">
-          <div class="maskContent5">
-            <img src="../assets/load.gif" alt="" class="loadgif">
-          </div>
-        </div>
-    </div> -->
-     <Toast :msg="toastText" v-if="showToast" />
+    <Toast :msg="toastText" v-if="showToast" />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
 import Toast from "@/components/Toast.vue";
 import Swiper from 'swiper';
-import { getVerifyCode, logIn, getAllPrize, getAPrize, saveAddress, userPrizeResult } from '../api/http.js'
+import { getVerifyCode, logIn, getAllPrize, getAPrize, savePrize, userPrizeResult, postAgree } from '../api/http.js'
 import { instance } from '../api/request.js'
-import { setInterval } from 'timers';
+import { setInterval, setTimeout } from 'timers';
 import '../style/swiper.min.css'
 import '../style/dia.scss'
 import axios from 'axios'
@@ -315,43 +489,40 @@ import axios from 'axios'
 export default {
   name: "Home",
   components: {
-    HelloWorld,
     Toast
   },
   data() {
     return {
-      address: '', // 邮寄地址
+      swiperTimer: '',//创建swiper的定时器
+      moreThen2: true, //中奖列表数据
+      buttonDisable: false, // 碰按钮等ajax回来再点击
+      confirmMessage: false, //点击确认奖品后的提示文字框
+      getPrizeRule: false, //同意抽奖规则弹出框
       prizeRule: false, //奖品结果弹出框
       islogin: false, //登录弹出框
       isEntitled: false, //是否有资格抽奖
-      winPrize: false, //中奖
-      // unWinPrize: false, //未中奖
-      prizeResult: false, //中奖结果弹出框
-      // loading: false,
-      codeBtnValue: "发送验证码",
-      waitTime: 60,
-      isAnim: false,
-      // isShowWhite: false,
-      // isShowYellow: false,
-      codeTimer: '',
-      canClick: false,
-      moreThen2: false,
-      showToast: false,
-      toastText: "",
-      phoneNum: "",
-      codeNum: "",
-      toastTimer: "",
-      clickNum: 0,
-      winnerList: [],
-      postAddr: false,
-      prizeInfo: {
+      winPrize: false, //中奖，确认和放弃弹出框
+      prizeResult: false, //中奖结果弹出框，点击查看中奖结果
+      codeBtnValue: "发送验证码", //发送验证码按钮展示文字
+      waitTime: 60, //验证码等待时间
+      isAnim: false, //盒子动画
+      codeTimer: '', //验证码一次性定时器
+      canClick: false, //验证码是否可点击
+      showToast: false, //是否展示toast提醒
+      toastText: "", //toast提醒文字
+      phoneNum: "", //电话号码
+      codeNum: "", //验证码
+      toastTimer: "", //toast提醒定时器
+      clickNum: 0, //页面碰之后的展示次数
+      winnerList: [], //中奖名单列表
+      prizeInfo: { //选则放弃确认弹出框和确认后跟短信内容一致弹出框的奖品信息展示
         price: "",
         name: "",
         src: ""
       },
-      houseMask: false,
-      isPrize: false,
-      userSeePrizeInfo: {
+      houseMask: false, //跑马灯动画
+      isPrize: false, //查看中奖结果是否中奖文字不同展示
+      userSeePrizeInfo: { //查看中奖结果中奖后文字展示
         price: "",
         name: "",
         src: ""
@@ -369,32 +540,56 @@ export default {
     // 这个生命周期可以获取dom节点
     this.showReg(); //一进页面就展示登录弹出框
     this.moniterNet();//监听网络
-
-    new Swiper ('.swiper-container', {
-      autoplay : true,     
-      speed: 3000,
-      loop : true,
-      direction: 'vertical',
-      autoHeight: true,
-      freeMode:true,
-      autoplayDisableOnInteraction: false
-    })
+    this.getPrizeList();//调取中奖列表
   },
- methods: {
-    init() {
-      this.getPrizeList();
-    },
 
+  methods: {
+    init() {
+      
+    },
+    //中奖列表中滚动效果插件
+    creatSwiper() {
+      new Swiper ('.swiper-container', {
+        autoplay : true,     
+        speed: 3000,
+        loop : true,
+        direction: 'vertical',
+        freeMode: true,
+        autoplayDisableOnInteraction: false,
+        observer: true,
+        observeParents: true,
+        slidesPerView : 3,
+        spaceBetween : 0,
+      })
+    },
+    //刷新页面，防止登录弹出框点击不了
     refreshBody(){
       document.querySelector('body').scrollTop = document.querySelector('body').scrollTop + 1;
       window.scroll(0, 0);
+    },
+
+    //用户点击同意规则
+    agreeRule() {
+      postAgree().then(res=>{
+        if (res.code === 0) {
+          this.closeAgreeBox();
+          this.openToast("您已确认同意活动规则");
+          this.closeToast();
+        }else if(res.code === -1 && res.message == 'token失效'){
+          this.tokenLostShowLog()
+        }else {
+          this.openToast(res.message);
+          this.closeToast();
+        }
+      }).finally(()=>{
+      })
     },
 
     //获取中奖列表
     getPrizeList(){
       axios({
         method: 'get',
-        url: 'http://118.89.87.12:8080/lottery/lotteryUser/getWinLotteryUserList',
+        url: 'http://r20777h151.imwork.net/lotteryUser/getWinLotteryUserList',
         headers: {
           // 'token': JSON.parse(localStorage.getItem('cj_userData'))&&(JSON.parse(localStorage.getItem('cj_userData')).token) || ""
         }
@@ -406,9 +601,16 @@ export default {
             item.minutes = this.dealMinutes(item.minutes);
           });
           this.winnerList = res.data.datas;
+         
           if(this.winnerList.length > 2){
-            this.moreThen2 = true
+            this.swiperTimer = setTimeout(()=>{
+              clearTimeout(this.swiperTimer);
+              this.creatSwiper();
+            }, 1000)
+          }else {
+            this.moreThen2 = false;
           }
+          
         }else {
           this.openToast(res.data.message);
           this.closeToast();
@@ -420,22 +622,51 @@ export default {
 
     //抽奖
     getPrize(again) {
-      if(again){// 点击再抽一次过来的
+      // 点击再抽一次过来的，先关闭掉再抽一次的弹出框
+      if(again){
         this.closeWinPrize();
       }
 
+      //抽奖按钮先改成不可点击
+      this.buttonDisable = true;
+
       getAPrize().then(res=>{
         if (res.code === 0 && res.data !== null) {
+
+          //判断用户是否点击同意规则，未同意弹出同意提示框
+          if(res.data.agreeStatus  === '1' ){
+            this.fixBody();
+            this.getPrizeRule = true;
+            return;
+          }
+
+          // 用户抽奖后未点击确认或者再抽一次，下次点击抽奖按钮提醒用户再次选择
+          if(res.data.confirmStatus === '1'){
+            this.prizeInfo.name = res.data.prizeInfo && res.data.prizeInfo.name || '';
+            this.prizeInfo.price = res.data.prizeInfo && res.data.prizeInfo.price || '';
+            this.prizeInfo.src = res.data.prizeInfo && res.data.prizeInfo.image || '';
+            //展示放弃保留弹出窗
+            this.winPrize = true;
+            return;
+          }
+
+          //获奖信息
           if(res.data.prizeInfo !== null){
             this.prizeInfo.name = res.data.prizeInfo.name;
             this.prizeInfo.price = res.data.prizeInfo.price;
             this.prizeInfo.src = res.data.prizeInfo.image;
+
+            //更新碰之后的点击次数
             this.clickNum = res.data.number
+
+            //更新本地缓存抽奖次数
             let cj_userData = JSON.parse(localStorage.getItem('cj_userData'));
             cj_userData.loginUser.number = this.clickNum;
             localStorage.setItem('cj_userData', JSON.stringify(cj_userData));
+            //抽奖动画效果
             this.animationHouse();
           }
+
         }else if(res.code === -1 && res.message == 'token失效'){
           this.tokenLostShowLog()
         }else {
@@ -443,10 +674,11 @@ export default {
           this.closeToast();
         }
       }).finally(()=>{
-       
+        this.buttonDisable = false;
       })
     },
 
+    //跑马灯动画
     animationHouse() {
       this.houseMask = true;
       this.houseTimer = setTimeout(()=>{
@@ -458,9 +690,22 @@ export default {
           this.winPrize = true;
           this.isAnim = false;
         }, 1000)
-      }, 1500)
+      }, 2500)
     },
 
+    //检查是否有token
+    showReg() {
+      const token = JSON.parse(localStorage.getItem('cj_userData'))&&(JSON.parse(localStorage.getItem('cj_userData')).token) || ""
+      if (token) {
+        this.clickNum = JSON.parse(localStorage.getItem('cj_userData'))&&(JSON.parse(localStorage.getItem('cj_userData')).loginUser.number) || 0
+        return
+      }
+      
+      this.fixBody();
+      this.islogin = true;
+    },
+
+    //登录
     login() {
       //ajax
       if(this.phoneNum == ""){
@@ -479,18 +724,18 @@ export default {
         'code': this.codeNum
       }
       logIn(params).then(res=>{
-        console.log('qqqqqqqqqq');
         if (res.code === 0) {
-          this.closeReg();
+          this.closeReg(); //关闭登陆弹出框
+          //像缓存里存用户数据
           localStorage.setItem('cj_userData', JSON.stringify(res.data));
-          this.clickNum = res.data.loginUser.number
-          if(res.data.loginUser.prizeInfo !== null){// 用户抽奖后未点击保留或者再抽一次，或者填写地址下次登陆提醒用户再次选择
-            this.prizeInfo.name = res.data.loginUser.prizeInfo.name;
-            this.prizeInfo.price = res.data.loginUser.prizeInfo.price;
-            this.prizeInfo.src = res.data.loginUser.prizeInfo.image;
-            //展示放弃保留弹出窗
-            this.winPrize = true;
+          //更新点击次数的显示
+          this.clickNum = res.data && res.data.loginUser && res.data.loginUser.number || 0
+          //判断用户是否点击同意规则，未同意弹出同意提示框
+          if(res.data && res.data.loginUser && res.data.loginUser.agreeStatus === '1'){//用户未点击同意
+            this.fixBody();
+            this.getPrizeRule = true;
           }
+
         }else {
           this.openToast(res.message);
           this.closeToast();
@@ -499,6 +744,7 @@ export default {
       }).catch((error) => console.log(error))
     },
 
+    //获取验证码
     getCode() {
       this.refreshBody();
       //未填写手机号的验证
@@ -512,7 +758,8 @@ export default {
 
       getVerifyCode(this.phoneNum).then(res=>{
         if (res.code === 0) {
-          console.log(res);
+          this.openToast("验证码已发送！");
+          this.closeToast();
         }else if(res.code == -1){
           this.closeReg();
           this.isEntitled = true;
@@ -522,6 +769,7 @@ export default {
       })
     },
 
+    //验证码时间倒计时
     codeTime() {
       if (this.waitTime == 0) {
           this.canClick = false;
@@ -539,30 +787,23 @@ export default {
           }, 1000)
       }
     },
-
+    
+    //保留奖品操作
     keepPrize() {
       //保留奖品
       this.closeWinPrize();
-      //打开地址输入弹出框
-      this.fixBody();
-      this.postAddr = true;
-    },
-
-    // 输入中奖后邮寄地址
-    saveAddr() {
-      if(this.address == ""){
-        this.openToast("请填写地址！");
-        this.closeToast();
+      //如果是最后一次中奖保留奖品，不需要给后台发请求
+      if(this.clickNum == 0) {
+        this.confirmMessage = true;
+        return;
       }
-      let params = {
-        address: this.address
-      }
-
-      saveAddress(JSON.stringify(params)).then(res=>{
+      //调取后台接口通知保留
+      savePrize().then(res=>{
         if (res.code === 0) {
-          this.postAddr = false
-          this.freeBody();
+          this.confirmMessage = true;
+          // 次数变为0
           this.clickNum = 0;
+          // 更新本地缓存里的次数
           let cj_userData = JSON.parse(localStorage.getItem('cj_userData'));
           cj_userData.loginUser.number = 0;
           localStorage.setItem('cj_userData', JSON.stringify(cj_userData));
@@ -573,15 +814,16 @@ export default {
           this.closeToast();
         }
       }).finally(()=>{
-        this.postAddr = false
       })
     },
-
+    
+    //弹出toast提醒
     openToast(text) {
       this.toastText = text;
       this.showToast = true;
     },
 
+    //关闭toast提醒
     closeToast() {
       this.toastTimer = setTimeout(()=>{
         clearTimeout(this.toastTimer);
@@ -589,7 +831,11 @@ export default {
       }, 1500)
     },
 
+    //中将时间处理函数
     dealMinutes(minutes) {
+      if(!minutes){
+        return; 
+      }
       if(minutes >= 60 && minutes < 24 * 60){
         minutes = parseInt(minutes / 60) + "小时" + ((minutes % 60) > 0 ? (minutes % 60) + "分钟" : "")
       }else if(minutes > 24 * 60){
@@ -604,6 +850,7 @@ export default {
       return minutes;
     },
 
+    //断网监听
     moniterNet() {
       let el = document.querySelector('body');  
       if (el.addEventListener) {  
@@ -625,17 +872,18 @@ export default {
         };  
       } 
     },
+
     //查看自己是否中奖
     showResult(){
       userPrizeResult().then(res=>{
         if (res.code === 0) {
-          if(res.data.prizeInfo !== null){
+          if(res.data&&(res.data.prizeInfo !== null)){//中奖了
             this.userSeePrizeInfo.name = res.data.prizeInfo.name
             this.userSeePrizeInfo.src = res.data.prizeInfo.image
             this.userSeePrizeInfo.price = res.data.prizeInfo.price
             this.isPrize = true
             this.prizeResult = true;
-          }else {
+          }else {//未中奖展示未中奖弹出框
             this.isPrize = false
             this.prizeResult = true;
           }
@@ -650,7 +898,12 @@ export default {
       })
       
     },
-
+    //关闭是否同意弹出框
+    closeAgreeBox(){
+      this.freeBody();
+      this.getPrizeRule = false
+    },
+    //关闭中奖结果弹出框
     closeResult() {
       this.prizeResult = false;
     },
@@ -664,21 +917,10 @@ export default {
       this.freeBody()
       this.prizeRule = false;
     },
-
+    //登陆超时
     tokenLostShowLog(){
       this.openToast("登录超时，请重新登录");
       this.closeToast();
-      this.fixBody();
-      this.islogin = true;
-    },
-
-    showReg() {
-      const token = JSON.parse(localStorage.getItem('cj_userData'))&&(JSON.parse(localStorage.getItem('cj_userData')).token) || ""
-      if (token) {
-        this.clickNum = JSON.parse(localStorage.getItem('cj_userData'))&&(JSON.parse(localStorage.getItem('cj_userData')).loginUser.number) || 0
-        return
-      }
-      
       this.fixBody();
       this.islogin = true;
     },
@@ -701,63 +943,11 @@ export default {
     closeWinPrize(){
       this.winPrize = false;
     }
+
   }
 };
 </script>
 <style lang="scss" scoped>
-  // .yellow{
-  //   width: 25px;
-  //   height: 27px;
-  //   background-image: url("../assets/yellow.png");
-  //   background-size: 100% 100%;
-  //   border-radius: 50%;
-  //   margin-bottom: 45px;
-  // }
-
-  // .white{
-  //   width: 22px;
-  //   height: 24px;
-  //   background-image: url("../assets/white.png");
-  //   background-size: 100% 100%;
-  //   border-radius: 50%;
-  //   margin-bottom: 45px;
-  // }
-
-  // .topbac .addYanimate {
-  //   animation: yellowtowhite 0.4s infinite ease;
-  //   -webkit-animation: yellowtowhite 0.4s infinite ease;
-  //   animation-fill-mode:forwards;
-  // }
-  // .topbac .addWanimate {
-  //   animation: whitetoyellow 0.4s infinite ease;
-  //   -webkit-animation: whitetoyellow 0.4s infinite ease;
-  //   animation-fill-mode: forwards;
-  // }
-
-  // @keyframes yellowtowhite {
-  //     0% {
-  //       background-image: url('../assets/yellow.png');
-  //       // box-shadow: yellow 0 0 0 0;
-  //     }
-
-  //     100% {
-  //       background-image: url('../assets/white.png');
-  //       // box-shadow: white 4px 6px 23px 6px;
-  //     }
-  // }
-
-  // @keyframes whitetoyellow {
-  //     0% {
-  //       background-image: url('../assets/white.png'); 
-  //       //  box-shadow: white 0 0 0 0;
-  //     }
-
-  //     100% {
-  //       background-image: url('../assets/yellow.png');
-  //       // box-shadow: yellow 4px 6px 23px 6px;
-  //     }
-  // }
-
   .addanim {
     -webkit-animation: move1 0.5s ease-in 1;
     animation: move1 0.5s ease-in 1;
@@ -923,6 +1113,12 @@ export default {
       font-size: 45.19px;
       color: #ffffff;
       font-weight: bold;
+      padding: 0;
+      margin: 0;
+      outline: none;
+      appearance: none;
+      background-color: transparent;
+      border: none;
 
       div{
         position: absolute;
