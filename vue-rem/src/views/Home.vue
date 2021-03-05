@@ -177,7 +177,7 @@
       </div>
     </div>
     <!-- 是否同意弹出框 -->
-    <div class="openDia" v-show="getPrizeRule">
+    <div class="openDia" v-if="getPrizeRule">
         <div class="contentBac">
           <div class="maskContent">
             <div class="closegroup" @click="closeAgreeBox">
@@ -429,7 +429,7 @@
               </div>
               <div class="draw-result">
                 <div class="confirm" @click="keepPrize">确认</div>
-                <div class="save" @click="getPrize('again')" v-show="clickNum!=0">放弃，再抽一次</div>
+                <div class="save" @click="getPrize('getagain')" v-show="clickNum!=0">放弃，再抽一次</div>
               </div>
             </div>
           </div>
@@ -589,7 +589,7 @@ export default {
     getPrizeList(){
       axios({
         method: 'get',
-        url: 'http://r20777h151.imwork.net/lotteryUser/getWinLotteryUserList',
+        url: 'http://118.89.87.12:8083/lottery/lotteryUser/getWinLotteryUserList',
         headers: {
           // 'token': JSON.parse(localStorage.getItem('cj_userData'))&&(JSON.parse(localStorage.getItem('cj_userData')).token) || ""
         }
@@ -621,17 +621,29 @@ export default {
     },
 
     //抽奖
-    getPrize(again) {
+    getPrize(getagain) {
+      let params = {
+        type: 1
+      };
       // 点击再抽一次过来的，先关闭掉再抽一次的弹出框
-      if(again){
+      if(getagain == 'getagain'){
         this.closeWinPrize();
+        params.type = 2;
       }
 
       //抽奖按钮先改成不可点击
       this.buttonDisable = true;
 
-      getAPrize().then(res=>{
+      getAPrize(params.type).then(res=>{
         if (res.code === 0 && res.data !== null) {
+
+          //更新碰之后的点击次数
+          this.clickNum = res.data.number
+
+          //更新本地缓存抽奖次数
+          let cj_userData = JSON.parse(localStorage.getItem('cj_userData'));
+          cj_userData.loginUser.number = this.clickNum;
+          localStorage.setItem('cj_userData', JSON.stringify(cj_userData));
 
           //判断用户是否点击同意规则，未同意弹出同意提示框
           if(res.data.agreeStatus  === '1' ){
@@ -656,13 +668,6 @@ export default {
             this.prizeInfo.price = res.data.prizeInfo.price;
             this.prizeInfo.src = res.data.prizeInfo.image;
 
-            //更新碰之后的点击次数
-            this.clickNum = res.data.number
-
-            //更新本地缓存抽奖次数
-            let cj_userData = JSON.parse(localStorage.getItem('cj_userData'));
-            cj_userData.loginUser.number = this.clickNum;
-            localStorage.setItem('cj_userData', JSON.stringify(cj_userData));
             //抽奖动画效果
             this.animationHouse();
           }
@@ -836,12 +841,12 @@ export default {
       if(!minutes){
         return; 
       }
-      if(minutes >= 60 && minutes < 24 * 60){
+      if(minutes >= 60 && minutes < (24 * 60)){
         minutes = parseInt(minutes / 60) + "小时" + ((minutes % 60) > 0 ? (minutes % 60) + "分钟" : "")
-      }else if(minutes > 24 * 60){
-        let day = parseInt(minutes / 24 * 60) + "天"
-        let hours = parseInt((minutes % 24 * 60) / 60) + "小时"
-        let second = parseInt(parseInt((minutes % 24 * 60) % 60)) + "分钟"
+      }else if(minutes > (24 * 60)){
+        let day = parseInt(minutes / (24 * 60)) + "天"
+        let hours = parseInt((minutes % (24 * 60)) / 60) + "小时"
+        let second = parseInt(parseInt((minutes % (24 * 60)) % 60)) + "分钟"
         minutes = day + hours + second
       }else {
         minutes = minutes + "分钟"
