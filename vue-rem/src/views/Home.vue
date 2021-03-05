@@ -9,18 +9,18 @@
         <div class="logo"><img src="../assets/logo.png" alt=""></div>
         <div class="box">
           <div class="mask1" :class="{addWanimate2: houseMask}" v-show="houseMask"></div>
-          <img src="../assets/yellowmask.png" alt="" style="display: none;">
-          <img src="../assets/whitemask.png" alt="" style="display: none;">
-          <img src="../assets/biglight.png" alt="" class="biglight">
+          <img src="../assets/yellowmask.png" alt="" style="display: none;" onclick ="return false">
+          <img src="../assets/whitemask.png" alt="" style="display: none;" onclick ="return false">
+          <img src="../assets/biglight.png" alt="" class="biglight" onclick ="return false">
           <button class="btn" @click.stop="getPrize" :disabled="buttonDisable">
             <div>{{'碰(' + clickNum + ')'}}</div>
           </button>
           <div class="prizeview">
             <div class="prizebox" :class="{ addanim: isAnim }">
-              <img src="../assets/box.png" alt="">
+              <img src="../assets/box.png" alt="" onclick ="return false">
             </div>
           </div>
-          <img src="../assets/gz.png" alt="" class="gz">
+          <img src="../assets/gz.png" alt="" class="gz" onclick ="return false">
         </div>
       </div>
       <div class="bottombac">
@@ -39,17 +39,17 @@
             </div>
             <div class="goods goods1">
               <div class="dq">
-                <img src="../assets/tsl.png" alt="">
+                <img src="../assets/tsl.png" alt="" onclick ="return false">
               </div>
             </div>
             <div class="goods goods2">
               <div class="dq1">
-                <img src="../assets/kpl.png" alt="">
+                <img src="../assets/kpl.png" alt="" onclick ="return false">
               </div>
             </div>
             <div class="goods goods3">
               <div class="dq2">
-                <img src="../assets/kkg.png" alt="">
+                <img src="../assets/kkg.png" alt="" onclick ="return false">
               </div>
             </div>
             <div>
@@ -67,8 +67,8 @@
               </div>
             </div>
             <div class="light">
-              <div><img src="../assets/smalllight.png" alt=""></div>
-              <div><img src="../assets/smalllight.png" alt=""></div>
+              <div><img src="../assets/smalllight.png" alt="" onclick ="return false"></div>
+              <div><img src="../assets/smalllight.png" alt="" onclick ="return false"></div>
             </div>
           </div>
           <div class="fr2">
@@ -82,12 +82,12 @@
             </div>
             <div class="goods goods1">
               <div class="dq3">
-                <img src="../assets/zg.png" alt="">
+                <img src="../assets/zg.png" alt="" onclick ="return false">
               </div>
             </div>
             <div class="goods goods2">
               <div class="dq4">
-                <img src="../assets/gzq.png" alt="">
+                <img src="../assets/gzq.png" alt="" onclick ="return false">
               </div>
             </div>
             <div>
@@ -101,13 +101,13 @@
               </div>
             </div>
             <div class="light">
-              <div><img src="../assets/smalllight.png" alt=""></div>
-              <div><img src="../assets/smalllight.png" alt=""></div>
+              <div><img src="../assets/smalllight.png" alt="" onclick ="return false"></div>
+              <div><img src="../assets/smalllight.png" alt="" onclick ="return false"></div>
             </div>
           </div>
          <div class="namelist">
             <div class="tittle">
-              <div class="medal"><img src="../assets/medal.png" alt=""></div>
+              <div class="medal"><img src="../assets/medal.png" alt="" onclick ="return false"></div>
               <div class="medaltittle">中奖名单</div>
             </div>
             <div class="swiper-container" v-show="moreThen2">
@@ -181,7 +181,7 @@
         <div class="contentBac">
           <div class="maskContent">
             <div class="closegroup" @click="closeAgreeBox">
-              <img src="../assets/close.png" alt="">
+              <img src="../assets/close.png" alt="" onclick ="return false">
             </div>
             <div class="whitebac">
               <div class="rulebac">
@@ -286,7 +286,7 @@
         <div class="contentBac">
           <div class="maskContent">
             <div class="closegroup" @click="closeRule">
-              <img src="../assets/close.png" alt="">
+              <img src="../assets/close.png" alt="" onclick ="return false">
             </div>
             <div class="whitebac">
               <div class="rulebac">
@@ -423,7 +423,7 @@
           <div class="maskContent4">
             <div class="whitebac">
               <div class="prizetittle">恭喜您，中奖了！</div>
-              <div class="prizeimg"><img :src="prizeInfo.src" alt=""></div>
+              <div class="prizeimg"><img :src="prizeInfo.src" alt="" onclick ="return false"></div>
               <div class="prizetips2">
                 {{'恭喜您获得价值' + prizeInfo.price + '元的' + prizeInfo.name + '一份'}}
               </div>
@@ -448,7 +448,7 @@
             </div>
             <div class="whitebac" v-if="isPrize">
               <div class="prizetittle">恭喜您，中奖了!</div>
-              <div class="prizeimg"><img :src="userSeePrizeInfo.src" alt=""></div>
+              <div class="prizeimg"><img :src="userSeePrizeInfo.src" alt="" onclick ="return false"></div>
               <div class="prizetips3">
                 {{'恭喜您获得价值' + userSeePrizeInfo.price + '元的' + userSeePrizeInfo.name + '一份'}}
               </div>
@@ -461,7 +461,7 @@
         <div class="contentBac">
           <div class="maskContent5">
             <div class="closegroup" @click="confirmMessage = false">
-              <img src="../assets/close.png" alt="">
+              <img src="../assets/close.png" alt="" onclick ="return false">
             </div>
             <div class="whitebac">
               <div class="prizetips4">
@@ -953,6 +953,8 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+  img{ pointer-events: none; }
+
   .addanim {
     -webkit-animation: move1 0.5s ease-in 1;
     animation: move1 0.5s ease-in 1;
