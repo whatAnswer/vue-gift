@@ -715,8 +715,9 @@ export default {
       }
 
       if (this.clickNum <=0 ) {
-        this.openToast('剩余抽奖次数为0');
-        this.closeToast();
+        // this.openToast('剩余抽奖次数为0');
+        // this.closeToast();
+        this.showResult()
         return
       }
       //抽奖按钮先改成不可点击
