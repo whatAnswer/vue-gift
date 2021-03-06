@@ -533,7 +533,7 @@ export default {
         name: "",
         src: ""
       },
-      houseTimer: "",//跑马灯定时器
+      houseTimer: null,//跑马灯定时器
       boxTimer: ""//抽奖纸箱子定时器
     }
   },
@@ -626,6 +626,8 @@ export default {
           this.closeAgreeBox();
           this.openToast("您已确认同意活动规则");
           this.closeToast();
+
+          this.refreshStorage()
         }else if(res.code === -1 && res.message == 'token失效'){
           this.tokenLostShowLog()
         }else {
@@ -634,6 +636,12 @@ export default {
         }
       }).finally(()=>{
       })
+    },
+
+    refreshStorage() {
+      const storage = JSON.parse(localStorage.getItem('cj_userData'))&&JSON.parse(localStorage.getItem('cj_userData'))
+      storage.loginUser.agreeStatus = '2'
+      localStorage.setItem('cj_userData', JSON.stringify(storage))
     },
 
     //获取中奖列表
@@ -681,6 +689,10 @@ export default {
       if(getagain == 'getagain'){
         this.closeWinPrize();
         params.type = 2;
+        
+        const storage = JSON.parse(localStorage.getItem('cj_userData'))&&JSON.parse(localStorage.getItem('cj_userData'))
+        storage.loginUser.confirmStatus = '2'
+        localStorage.setItem('cj_userData', JSON.stringify(storage))
       }
 
       const userInfo = JSON.parse(localStorage.getItem('cj_userData'))
@@ -693,7 +705,7 @@ export default {
       }
 
       // 用户抽奖后未点击确认或者再抽一次，下次点击抽奖按钮提醒用户再次选择
-      if(userInfo.loginUser.confirmStatus === '1'){
+      if(userInfo.loginUser.confirmStatus === '1' && userInfo.loginUser.prizeInfo){
         this.prizeInfo.name = userInfo.loginUser.prizeInfo && userInfo.loginUser.prizeInfo.name || '';
         this.prizeInfo.price = userInfo.loginUser.prizeInfo && userInfo.loginUser.prizeInfo.price || '';
         this.prizeInfo.src = userInfo.loginUser.prizeInfo && userInfo.loginUser.prizeInfo.image || '';
@@ -702,14 +714,25 @@ export default {
         return;
       }
 
+      if (this.clickNum <=0 ) {
+        this.openToast('剩余抽奖次数为0');
+        this.closeToast();
+        return
+      }
       //抽奖按钮先改成不可点击
       this.buttonDisable = true;
-
       //抽奖动画效果
-      this.animationHouse();
+      this.houseMask = true; //跑马灯
 
       getAPrize(params.type).then(res=>{
         if (res.code === 0 && res.data !== null) {
+          this.isAnim = true;
+          this.houseMask = false;
+          this.boxTimer = setTimeout(()=>{
+            clearTimeout(this.boxTimer);
+            this.winPrize = true;
+            this.isAnim = false;
+          }, 1000)
 
           //更新碰之后的点击次数
           this.clickNum = res.data.number
@@ -734,8 +757,8 @@ export default {
         }
       }).finally(()=>{
         this.buttonDisable = false;
-        clearTimeout(this.houseTimer)
         this.getPrizeCounts()
+        this.houseMask = false; //跑马灯结束
       })
     },
 
@@ -1150,7 +1173,7 @@ export default {
       margin-top: -135px;
       width: 124px;
       height: 124px;
-      border: 4px solid #ffffff;
+      // border: 4px solid #ffffff;
       margin-left: 94px;
 
       img{
