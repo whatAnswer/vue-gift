@@ -28,13 +28,13 @@
           <div class="fr">
             <div class="gmingroup">
               <div class="gming">
-                盲盒数500
+                盲盒数{{productNum.countOne}}
               </div>
               <div class="gming g2">
-                盲盒数20
+                盲盒数{{productNum.countTwo}}
               </div>
               <div class="gming g3">
-                盲盒数1000
+                盲盒数{{productNum.countThree}}
               </div>
             </div>
             <div class="goods goods1">
@@ -74,10 +74,10 @@
           <div class="fr2">
             <div class="gmingroup">
               <div class="gming g4">
-                盲盒数1000
+                盲盒数{{productNum.countFour}}
               </div>
               <div class="gming g5">
-                盲盒数480
+                盲盒数{{productNum.countFive}}
               </div>
             </div>
             <div class="goods goods1">
@@ -465,7 +465,8 @@
             </div>
             <div class="whitebac">
               <div class="prizetips4">
-                {{'【Magimix】亲爱的用户，恭喜您以'+ prizeInfo.price + '元的价格获得本次活动的' + prizeInfo.name + '超值换购优惠券一张，我司将于3个工作日内将对应的优惠券发放至您的账户内，请于30日内登录magimix下单小程序，在我的优惠券中查看并使用优惠券。如有疑问，请及时和您的美食顾问取得联系。'}}
+                {{'亲爱的用户，恭喜您以538元的活动价格获得价值￥' + prizeInfo.price + '元的' + prizeInfo.name + '换购优惠券一张，我司将于3个工作日内将对应的优惠券发放至您的账户内，请于30日内登录magimix下单小程序，在我的优惠券中查看并使用优惠券。如有疑问，请及时和您的美食顾问取得联系。'}}
+                <!-- {{'【Magimix】亲爱的用户，恭喜您以'+ prizeInfo.price + '元的价格获得本次活动的' + prizeInfo.name + '超值换购优惠券一张，我司将于3个工作日内将对应的优惠券发放至您的账户内，请于30日内登录magimix下单小程序，在我的优惠券中查看并使用优惠券。如有疑问，请及时和您的美食顾问取得联系。'}} -->
               </div>
             </div>
           </div>
@@ -479,9 +480,7 @@
 // @ is an alias to /src
 import Toast from "@/components/Toast.vue";
 import Swiper from 'swiper';
-import { getVerifyCode, logIn, getAllPrize, getAPrize, savePrize, userPrizeResult, postAgree, getUserInfo } from '../api/http.js'
-import { instance } from '../api/request.js'
-import { setInterval, setTimeout } from 'timers';
+import { getVerifyCode, logIn, getAllPrize, getAPrize, savePrize, userPrizeResult, postAgree, getUserInfo, getPrizeCount } from '../api/http.js'
 import '../style/swiper.min.css'
 import '../style/dia.scss'
 import axios from 'axios'
@@ -493,6 +492,13 @@ export default {
   },
   data() {
     return {
+      productNum: {
+        countOne: 0,
+        countTwo: 0,
+        countThree: 0,
+        countFour: 0,
+        countFive: 0,
+      },
       swiperTimer: '',//创建swiper的定时器
       moreThen2: true, //中奖列表数据
       buttonDisable: false, // 碰按钮等ajax回来再点击
@@ -532,23 +538,44 @@ export default {
     }
   },
   created() {
+    console.log(process.env)
     // 此时获取不到dom节点
     // 不涉及到dom操作的方法
     this.init()
   },
   mounted() {
-    // // 这个生命周期可以获取dom节点
+    // 这个生命周期可以获取dom节点
     // this.showReg(); //一进页面就展示登录弹出框
-    // this.moniterNet();//监听网络
+    this.moniterNet();//监听网络
     this.getPrizeList();//调取中奖列表
   },
 
   methods: {
     init() {
-      // 这个生命周期可以获取dom节点
       this.showReg(); //一进页面就展示登录弹出框
-      this.moniterNet();//监听网络
     },
+
+    //获取剩余奖品数量接口
+    getPrizeCounts(){
+      getPrizeCount().then(res=>{
+        if (res.code === 0) {
+          console.log(res)
+          this.productNum = {
+            countOne: res.datas[0]['quantity'],
+            countTwo: res.datas[1]['quantity'],
+            countThree: res.datas[2]['quantity'],
+            countFour: res.datas[3]['quantity'],
+            countFive: res.datas[4]['quantity'],
+          }
+        } else if(res.code === -1 && res.message == 'token失效'){
+          this.tokenLostShowLog()
+        } else {
+          this.openToast(res.message);
+          this.closeToast();
+        }
+      })
+    },
+
     // 用户信息数据
     getUserInfo() {
       getUserInfo().then(res=>{
@@ -567,6 +594,8 @@ export default {
           this.openToast(res.message);
           this.closeToast();
         }
+      }).finally(()=>{
+        this.getPrizeCounts()
       })
     },
     //中奖列表中滚动效果插件
@@ -611,7 +640,8 @@ export default {
     getPrizeList(){
       axios({
         method: 'get',
-        url: 'http://118.89.87.12:8082/lottery/lotteryUser/getWinLotteryUserList',
+        // url: `${process.env.BASE_URL}/lottery/lotteryUser/getWinLotteryUserList`,
+        url: `${process.env.VUE_APP_URL}/lotteryUser/getWinLotteryUserList`,
         headers: {
           // 'token': JSON.parse(localStorage.getItem('cj_userData'))&&(JSON.parse(localStorage.getItem('cj_userData')).token) || ""
         }
@@ -694,8 +724,6 @@ export default {
             this.prizeInfo.name = res.data.prizeInfo.name;
             this.prizeInfo.price = res.data.prizeInfo.price;
             this.prizeInfo.src = res.data.prizeInfo.image;
-
-            clearTimeout(this.this.houseTimer)
           }
 
         }else if(res.code === -1 && res.message == 'token失效'){
@@ -706,6 +734,8 @@ export default {
         }
       }).finally(()=>{
         this.buttonDisable = false;
+        clearTimeout(this.houseTimer)
+        this.getPrizeCounts()
       })
     },
 
@@ -773,7 +803,8 @@ export default {
           this.closeToast();
         }
       }).finally(()=>{
-      }).catch((error) => console.log(error))
+        this.getPrizeCounts()
+      })
     },
 
     //获取验证码
@@ -827,6 +858,7 @@ export default {
       //如果是最后一次中奖保留奖品，不需要给后台发请求
       if(this.clickNum == 0) {
         this.confirmMessage = true;
+        this.getPrizeCounts()
         return;
       }
       //调取后台接口通知保留
@@ -846,6 +878,7 @@ export default {
           this.closeToast();
         }
       }).finally(()=>{
+        this.getPrizeCounts()
       })
     },
     

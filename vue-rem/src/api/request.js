@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import axios from 'axios'
 
-
+console.log(process.env.BASE_URL)
 const instance = axios.create({
-	baseURL: '',
+	baseURL: process.env.VUE_APP_URL || '',
 	// headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 	headers: {
 		'Content-Type': 'application/json',
