@@ -552,29 +552,14 @@ export default {
     // 用户信息数据
     getUserInfo() {
       getUserInfo().then(res=>{
-        console.log(res)
+        
         if (res.code === 0) {
           const storage = {}
           storage.loginUser = res.data
           storage.token = JSON.parse(localStorage.getItem('cj_userData'))&&JSON.parse(localStorage.getItem('cj_userData')).token
           localStorage.setItem('cj_userData', JSON.stringify(storage))
 
-           //判断用户是否点击同意规则，未同意弹出同意提示框
-          if(res.data.agreeStatus  === '1' ){
-            this.fixBody();
-            this.getPrizeRule = true;
-            return;
-          }
-
-          // 用户抽奖后未点击确认或者再抽一次，下次点击抽奖按钮提醒用户再次选择
-          if(res.data.confirmStatus === '1'){
-            this.prizeInfo.name = res.data.prizeInfo && res.data.prizeInfo.name || '';
-            this.prizeInfo.price = res.data.prizeInfo && res.data.prizeInfo.price || '';
-            this.prizeInfo.src = res.data.prizeInfo && res.data.prizeInfo.image || '';
-            //展示放弃保留弹出窗
-            this.winPrize = true;
-            return;
-          }
+          this.clickNum = JSON.parse(localStorage.getItem('cj_userData'))&&(JSON.parse(localStorage.getItem('cj_userData')).loginUser.number) || 0
 
         } else if(res.code === -1 && res.message == 'token失效'){
           this.tokenLostShowLog()
