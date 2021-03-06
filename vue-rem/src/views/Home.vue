@@ -479,7 +479,7 @@
 // @ is an alias to /src
 import Toast from "@/components/Toast.vue";
 import Swiper from 'swiper';
-import { getVerifyCode, logIn, getAllPrize, getAPrize, savePrize, userPrizeResult, postAgree } from '../api/http.js'
+import { getVerifyCode, logIn, getAllPrize, getAPrize, savePrize, userPrizeResult, postAgree, getUserInfo } from '../api/http.js'
 import { instance } from '../api/request.js'
 import { setInterval, setTimeout } from 'timers';
 import '../style/swiper.min.css'
@@ -537,15 +537,52 @@ export default {
     this.init()
   },
   mounted() {
-    // 这个生命周期可以获取dom节点
-    this.showReg(); //一进页面就展示登录弹出框
-    this.moniterNet();//监听网络
+    // // 这个生命周期可以获取dom节点
+    // this.showReg(); //一进页面就展示登录弹出框
+    // this.moniterNet();//监听网络
     this.getPrizeList();//调取中奖列表
   },
 
   methods: {
     init() {
-      
+      // 这个生命周期可以获取dom节点
+      this.showReg(); //一进页面就展示登录弹出框
+      this.moniterNet();//监听网络
+    },
+    // 用户信息数据
+    getUserInfo() {
+      getUserInfo().then(res=>{
+        console.log(res)
+        if (res.code === 0) {
+          const storage = {}
+          storage.loginUser = res.data
+          storage.token = JSON.parse(localStorage.getItem('cj_userData'))&&JSON.parse(localStorage.getItem('cj_userData')).token
+          localStorage.setItem('cj_userData', JSON.stringify(storage))
+
+           //判断用户是否点击同意规则，未同意弹出同意提示框
+          if(res.data.agreeStatus  === '1' ){
+            this.fixBody();
+            this.getPrizeRule = true;
+            return;
+          }
+
+          // 用户抽奖后未点击确认或者再抽一次，下次点击抽奖按钮提醒用户再次选择
+          if(res.data.confirmStatus === '1'){
+            this.prizeInfo.name = res.data.prizeInfo && res.data.prizeInfo.name || '';
+            this.prizeInfo.price = res.data.prizeInfo && res.data.prizeInfo.price || '';
+            this.prizeInfo.src = res.data.prizeInfo && res.data.prizeInfo.image || '';
+            //展示放弃保留弹出窗
+            this.winPrize = true;
+            return;
+          }
+
+        } else if(res.code === -1 && res.message == 'token失效'){
+          this.tokenLostShowLog()
+        } else {
+          this.openToast(res.message);
+          this.closeToast();
+        }
+      })
     },
     //中奖列表中滚动效果插件
     creatSwiper() {
@@ -595,8 +632,8 @@ export default {
         }
       }).then(res=>{
         if (res.data.code === 0) {
-          console.log("中奖列表");
-          console.log(res)
+          // console.log("中奖列表");
+          // console.log(res)
           res.data.datas.forEach((item)=>{
             item.minutes = this.dealMinutes(item.minutes);
           });
@@ -703,6 +740,7 @@ export default {
       const token = JSON.parse(localStorage.getItem('cj_userData'))&&(JSON.parse(localStorage.getItem('cj_userData')).token) || ""
       if (token) {
         this.clickNum = JSON.parse(localStorage.getItem('cj_userData'))&&(JSON.parse(localStorage.getItem('cj_userData')).loginUser.number) || 0
+        this.getUserInfo()
         return
       }
       
@@ -851,7 +889,7 @@ export default {
       }else {
         minutes = minutes + "分钟"
       }
-      console.log(minutes);
+      // console.log(minutes);
       return minutes;
     },
 

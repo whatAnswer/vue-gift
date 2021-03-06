@@ -3,7 +3,7 @@ import axios from 'axios'
 
 
 const instance = axios.create({
-	baseURL: 'http://127.0.0.1:9999',
+	baseURL: '',
 	// headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
 	headers: {
 		'Content-Type': 'application/json',
@@ -45,6 +45,8 @@ MyPlugin.install = function (Vue) {
 }
 
 Vue.use(MyPlugin)
+
+export { instance }
 
 export function getRequest(url, params, config = {}) {
 	return Vue.$axios({ method: 'GET', url, params, ...config })

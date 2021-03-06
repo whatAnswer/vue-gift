@@ -1,4 +1,4 @@
-import { getRequest, putRequest, postRequest } from "./request.js"
+import { getRequest, putRequest, postRequest, instance } from "./request.js"
 // import qs from 'qs'
 
 // 下面是示列代码
@@ -61,4 +61,12 @@ export function userPrizeResult(params) {
 
 export function postAgree(params) {
 	return getRequest('http://118.89.87.12:8082/lottery/lotteryUser/agreeRules', params);
+}
+
+// 获取用户信息
+export function getUserInfo() {
+	return instance({
+		method: 'get',
+		url: 'http://118.89.87.12:8082/lottery/lotteryUser/getUserInfo'
+	})
 }
