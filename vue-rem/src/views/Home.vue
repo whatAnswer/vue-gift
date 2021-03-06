@@ -114,7 +114,7 @@
               <div class="swiper-wrapper">
                 <div class="swiper-slide" v-for="item in winnerList" :key="item.id" style="height: 42.35px;">
                   <div class="prizeline">
-                    <div class="name">{{item.name}}</div>
+                    <div class="name">{{item.phone}}</div>
                     <div class="prize">{{item.minutes + '前抽中' + item.prizeInfo.name}}</div>
                   </div>
                 </div>
@@ -168,7 +168,7 @@
             </div> -->
             <div class="" v-show="!moreThen2">
               <div class="prizeline" v-for="item in winnerList" :key="item.id">
-                <div class="name">{{item.name}}</div>
+                <div class="name">{{item.phone}}</div>
                 <div class="prize">{{item.minutes + '前抽中' + item.prizeInfo.name}}</div>
               </div>
             </div>
@@ -589,7 +589,7 @@ export default {
     getPrizeList(){
       axios({
         method: 'get',
-        url: 'http://118.89.87.12:8083/lottery/lotteryUser/getWinLotteryUserList',
+        url: 'http://118.89.87.12:8082/lottery/lotteryUser/getWinLotteryUserList',
         headers: {
           // 'token': JSON.parse(localStorage.getItem('cj_userData'))&&(JSON.parse(localStorage.getItem('cj_userData')).token) || ""
         }
@@ -1497,7 +1497,7 @@ export default {
           overflow: hidden;
           white-space: nowrap;
           text-overflow: ellipsis;
-          text-align: right;
+          text-align: left;
         }
       }
     }

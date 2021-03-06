@@ -36,29 +36,29 @@ export function draw(params) {
 }
 // 新加的http方法
 export function getVerifyCode(params) {
-	return getRequest('http://118.89.87.12:8083/lottery/lotteryUser/sendVerificationCode/' + params, params);
+	return getRequest('http://118.89.87.12:8082/lottery/lotteryUser/sendVerificationCode/' + params, params);
 }
 
 export function logIn(params) {
-	return getRequest('http://118.89.87.12:8083/lottery/lotteryUser/login/' + params.num + '/' + params.code , params);
+	return getRequest('http://118.89.87.12:8082/lottery/lotteryUser/login/' + params.num + '/' + params.code , params);
 }
 
 export function getAllPrize(params) {
-	return getRequest('http://118.89.87.12:8083/lottery/lotteryUser/getWinLotteryUserList', params);
+	return getRequest('http://118.89.87.12:8082/lottery/lotteryUser/getWinLotteryUserList', params);
 }
 
 export function getAPrize(data) {
-	return getRequest('http://118.89.87.12:8083/lottery/prizeInfo/startLottery/' + data, data);
+	return getRequest('http://118.89.87.12:8082/lottery/prizeInfo/startLottery/' + data, data);
 }
 
 export function savePrize(params) {
-	return postRequest('http://118.89.87.12:8083/lottery/lotteryUser/saveAddress', params)
+	return postRequest('http://118.89.87.12:8082/lottery/lotteryUser/saveAddress', params)
 }
 
 export function userPrizeResult(params) {
-	return getRequest('http://118.89.87.12:8083/lottery/prizeInfo/getDrawLotteryInfo', params);
+	return getRequest('http://118.89.87.12:8082/lottery/prizeInfo/getDrawLotteryInfo', params);
 }
 
 export function postAgree(params) {
-	return getRequest('http://118.89.87.12:8083/lottery/lotteryUser/agreeRules', params);
+	return getRequest('http://118.89.87.12:8082/lottery/lotteryUser/agreeRules', params);
 }
