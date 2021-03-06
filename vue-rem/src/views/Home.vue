@@ -668,8 +668,30 @@ export default {
         params.type = 2;
       }
 
+      const userInfo = JSON.parse(localStorage.getItem('cj_userData'))
+
+      //判断用户是否点击同意规则，未同意弹出同意提示框
+      if(userInfo.loginUser.agreeStatus  === '1' ){
+        this.fixBody();
+        this.getPrizeRule = true;
+        return;
+      }
+
+      // 用户抽奖后未点击确认或者再抽一次，下次点击抽奖按钮提醒用户再次选择
+      if(userInfo.loginUser.confirmStatus === '1'){
+        this.prizeInfo.name = userInfo.loginUser.prizeInfo && userInfo.loginUser.prizeInfo.name || '';
+        this.prizeInfo.price = userInfo.loginUser.prizeInfo && userInfo.loginUser.prizeInfo.price || '';
+        this.prizeInfo.src = userInfo.loginUser.prizeInfo && userInfo.loginUser.prizeInfo.image || '';
+        //展示放弃保留弹出窗
+        this.winPrize = true;
+        return;
+      }
+
       //抽奖按钮先改成不可点击
       this.buttonDisable = true;
+
+      //抽奖动画效果
+      this.animationHouse();
 
       getAPrize(params.type).then(res=>{
         if (res.code === 0 && res.data !== null) {
@@ -682,31 +704,13 @@ export default {
           cj_userData.loginUser.number = this.clickNum;
           localStorage.setItem('cj_userData', JSON.stringify(cj_userData));
 
-          //判断用户是否点击同意规则，未同意弹出同意提示框
-          if(res.data.agreeStatus  === '1' ){
-            this.fixBody();
-            this.getPrizeRule = true;
-            return;
-          }
-
-          // 用户抽奖后未点击确认或者再抽一次，下次点击抽奖按钮提醒用户再次选择
-          if(res.data.confirmStatus === '1'){
-            this.prizeInfo.name = res.data.prizeInfo && res.data.prizeInfo.name || '';
-            this.prizeInfo.price = res.data.prizeInfo && res.data.prizeInfo.price || '';
-            this.prizeInfo.src = res.data.prizeInfo && res.data.prizeInfo.image || '';
-            //展示放弃保留弹出窗
-            this.winPrize = true;
-            return;
-          }
-
           //获奖信息
           if(res.data.prizeInfo !== null){
             this.prizeInfo.name = res.data.prizeInfo.name;
             this.prizeInfo.price = res.data.prizeInfo.price;
             this.prizeInfo.src = res.data.prizeInfo.image;
 
-            //抽奖动画效果
-            this.animationHouse();
+            clearTimeout(this.this.houseTimer)
           }
 
         }else if(res.code === -1 && res.message == 'token失效'){
