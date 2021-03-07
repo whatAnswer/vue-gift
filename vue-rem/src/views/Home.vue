@@ -177,7 +177,7 @@
       </div>
     </div>
     <!-- 是否同意弹出框 -->
-    <div class="openDia" v-if="getPrizeRule">
+    <div class="openDia" v-show="getPrizeRule">
         <div class="contentBac">
           <div class="maskContent">
             <div class="closegroup" @click="closeAgreeBox">
@@ -384,7 +384,7 @@
         </div>
     </div>
     <!-- 登录弹出框 -->
-    <div class="openDia2" v-if="islogin">
+    <div class="openDia21" v-show="islogin">
         <div class="contentBac">
           <div class="maskContent2">
             <div class="whitebac">
@@ -422,10 +422,10 @@
         <div class="contentBac">
           <div class="maskContent4">
             <div class="whitebac">
-              <div class="prizetittle">恭喜您，中奖了！</div>
+              <div class="prizetittle">恭喜您</div>
               <div class="prizeimg"><img :src="prizeInfo.src" alt="" onclick ="return false"></div>
               <div class="prizetips2">
-                {{'恭喜您获得价值' + prizeInfo.price + '元的' + prizeInfo.name + '一份'}}
+                {{'恭喜您抽中价值' + prizeInfo.price + '元的' + prizeInfo.name + '一份'}}
               </div>
               <div class="draw-result">
                 <div class="confirm" @click="keepPrize">确认</div>
@@ -447,10 +447,10 @@
               <div class="prizetips">您暂时未获得任何奖品。</div>
             </div>
             <div class="whitebac" v-if="isPrize">
-              <div class="prizetittle">恭喜您，中奖了!</div>
+              <div class="prizetittle">恭喜您</div>
               <div class="prizeimg"><img :src="userSeePrizeInfo.src" alt="" onclick ="return false"></div>
               <div class="prizetips3">
-                {{'恭喜您获得价值' + userSeePrizeInfo.price + '元的' + userSeePrizeInfo.name + '一份'}}
+                {{'恭喜您抽中价值' + userSeePrizeInfo.price + '元的' + userSeePrizeInfo.name + '一份'}}
               </div>
             </div>
           </div>
@@ -467,6 +467,21 @@
               <div class="prizetips4">
                 {{'亲爱的用户，恭喜您以538元的活动价格获得价值￥' + prizeInfo.price + '元的' + prizeInfo.name + '换购优惠券一张，我司将于3个工作日内将对应的优惠券发放至您的账户内，请于30日内登录magimix下单小程序，在我的优惠券中查看并使用优惠券。如有疑问，请及时和您的美食顾问取得联系。'}}
                 <!-- {{'【Magimix】亲爱的用户，恭喜您以'+ prizeInfo.price + '元的价格获得本次活动的' + prizeInfo.name + '超值换购优惠券一张，我司将于3个工作日内将对应的优惠券发放至您的账户内，请于30日内登录magimix下单小程序，在我的优惠券中查看并使用优惠券。如有疑问，请及时和您的美食顾问取得联系。'}} -->
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <!-- 盲盒抽完3000份的活动结束 -->
+    <div class="openDia" v-if="activeOver">
+        <div class="contentBac">
+          <div class="maskContent8">
+            <div class="closegroup" @click="activeOver = false">
+              <img src="../assets/close.png" alt="" onclick ="return false">
+            </div>
+            <div class="whitebac">
+              <div class="prizetips5">
+                很抱歉，3000份盲盒已经全部抽完
               </div>
             </div>
           </div>
@@ -492,6 +507,7 @@ export default {
   },
   data() {
     return {
+      activeOver: false,
       productNum: {
         countOne: 0,
         countTwo: 0,
@@ -579,7 +595,6 @@ export default {
     // 用户信息数据
     getUserInfo() {
       getUserInfo().then(res=>{
-        
         if (res.code === 0) {
           const storage = {}
           storage.loginUser = res.data
@@ -587,7 +602,6 @@ export default {
           localStorage.setItem('cj_userData', JSON.stringify(storage))
 
           this.clickNum = JSON.parse(localStorage.getItem('cj_userData'))&&(JSON.parse(localStorage.getItem('cj_userData')).loginUser.number) || 0
-
         } else if(res.code === -1 && res.message == 'token失效'){
           this.tokenLostShowLog()
         } else {
@@ -752,7 +766,9 @@ export default {
 
         }else if(res.code === -1 && res.message == 'token失效'){
           this.tokenLostShowLog()
-        }else {
+        } else if (res.code === 1) {
+          this.activeOver = true
+        } else {
           this.openToast(res.message);
           this.closeToast();
         }
@@ -786,9 +802,8 @@ export default {
         this.getUserInfo()
         return
       }
-      
-      this.fixBody();
       this.islogin = true;
+      this.fixBody();
     },
 
     //登录
@@ -842,8 +857,9 @@ export default {
       }
       //调用验证码60s倒计时
       this.codeTime();
-
+      console.log('1111111111111')
       getVerifyCode(this.phoneNum).then(res=>{
+         console.log('22222222')
         if (res.code === 0) {
           this.openToast("验证码已发送！");
           this.closeToast();
@@ -1010,8 +1026,8 @@ export default {
     tokenLostShowLog(){
       this.openToast("登录超时，请重新登录");
       this.closeToast();
-      this.fixBody();
       this.islogin = true;
+      this.fixBody();
     },
     
     closeReg() {
